@@ -10,14 +10,14 @@ Hello crewmates! We have some new tasks that we need to complete before the impo
 
 - Mix of Python & Javascript: No parenthesis in if/while/for statements, but does have brackets
 - Among Us-themed language and syntax
+- Everything is natively private
 - Static typing
 - Object oriented
 - Built-in data structures
-- Extremely suspicious, but detailed error messages
-- Everything is natively private (Don't let the imposters know your next move!)
 - Objects are natively passed by copy for security
 - varus (equivalent to Java's var) can be used for type inference
 - String interpolation
+- Suspicious but detailed error messages
 
 ### Sussy Types
 
@@ -128,7 +128,7 @@ function evenOrOdd(x){
 <td>
     
 ```
-task evenOrOdd(intus x) -> sus {
+task evenOrOdd(intus x) -> sussy {
     vote x % 2 == 0
 }
 ```
@@ -216,7 +216,7 @@ is crewmate {
 <td>
     
 ```javascript
-for (var x = 0; x < 10; x++) {
+for (var x = 0; x < 3; x++) {
     break
 }
 ```
@@ -224,7 +224,7 @@ for (var x = 0; x < 10; x++) {
 <td>
     
 ```
-scan varus x = 0 til 10 {
+scan varus x = 0 till 3 {
     eject
 }
 ```
@@ -262,7 +262,7 @@ p.setWidth(15)
 role Rectangle {
     build (doublus h, intus w) {
         doublus thus.height = h
-        int me.width = w
+        intus thus.width = w
     }
     task getWidth() -> intus {
         vote thus.width
@@ -305,13 +305,13 @@ varus fruits = ['Apple', 'Banana']
 <td> 
     
 ```javascript
-// comment goes here
+// insert sussy comment
 ```
 </td>
 <td>
     
 ```
-cR comment goes here
+cR insert sussy comment
 ```
 </td>
 </table>
