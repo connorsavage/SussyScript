@@ -203,7 +203,7 @@ while(true){
 <td>
     
 ```
-is crewmate {
+during crewmate {
     eject
 }
 ```
