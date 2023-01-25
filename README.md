@@ -1,6 +1,6 @@
 <img src=./docs/SussyScriptLogo.png width="500" height="500">
 
-# [SussyScript](https://github.com/connorsavage/LanguagesAutomata2)
+# [SussyScript](https://github.com/connorsavage/SussyScript)
 
 Hello crewmates! We have some new tasks that we need to complete before the imposters get to us! These tasks requires the crew to do programming; fortunately, the admins just installed SussyScript to help with creating these sussy programs! SussyScript tasks should be easy to follow but also fun! Let's get to work so we can find out who is faking their tasks...
 
@@ -89,7 +89,7 @@ report “Hello world!”
 </td>
 </table>
 
-### Variable Assignment
+### Assigning variables
 
 <table>
 <tr> <th>JavaScript</th><th>SussyScript</th><tr>
@@ -109,6 +109,37 @@ varus x = 0
 intus x = 0
 ```
 
+</td>
+</table>
+
+### if-statements
+
+<table>
+<tr> <th>JavaScript</th><th>SussyScript</th><tr>
+</tr>
+<td>
+    
+```javascript
+if (x < 10) {
+  return 1;
+} else if (x < 20) {
+  return -1;
+} else {
+  return 0;
+}
+```
+</td>
+<td>
+    
+```
+sus x < 10 {
+  vote 1
+} mega sus (x < 20) {
+  vote -1
+} mega {
+  vote 0
+} 
+```
 </td>
 </table>
 
@@ -152,37 +183,6 @@ function add(a, b){
 task add(intus a, intus b) -> intus { 
    vote a + b
 }
-```
-</td>
-</table>
-
-### if-statements
-
-<table>
-<tr> <th>JavaScript</th><th>SussyScript</th><tr>
-</tr>
-<td>
-    
-```javascript
-if (x < 10) {
-  return 1;
-} else if (x < 20) {
-  return -1;
-} else {
-  return 0;
-}
-```
-</td>
-<td>
-    
-```
-sus x < 10 {
-  vote 1
-} mega sus (x < 20) {
-  vote -1
-} mega {
-  vote 0
-} 
 ```
 </td>
 </table>
