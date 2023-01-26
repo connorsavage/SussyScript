@@ -1,0 +1,27 @@
+{
+  "name": "sussyscript",
+  "version": "1.0.0",
+  "description": "a compiler for SussyScript",
+  "main": "SussyScript.js",
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "c8 mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/connorsavage/SussyScript.git"
+  },
+  "keywords": [
+    "compiler",
+    "SussyScript"
+  ],
+  "author": "Connor Savage, Mitchell Cootauco, Sebastion Cruz, Erin Hurlburt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/connorsavage/SussyScript/issues"
+  },
+  "homepage": "https://github.com/connorsavage/SussyScript#readme"
+}
