@@ -1,52 +1,11 @@
 SussyScript {
-  Program      = Statement+
-
-  Statement    = print Exp              -- print
-               | VarDec
-               | FunDec
-               | Assignment
-               | LoopStatement
-               | IfStmt
-               | Return           
-               | break          
-               | Call
-               | ClassDec
-               | DotExpression
-               | DotCall
-                   
-  VarDec       = (Type | let) id "=" Exp
-
-  FunDec       = function id "(" ListOf<Param, ","> ")" "->" Type Block
-  
-  Assignment   = Exp6 "=" Exp                  -- regular
-
-  Return      = return Exp 		--exp
-              | return          --short     
-               
-  Call      = id "(" Args ")"
-  Params    = ListOf<id, ",">
-  Args      = ListOf<Exp, ",">
- 
-  DotExpression  = this "." id
-
-  DotCall  = id "." Call 
-  
-  LoopStatement = while Exp Block 				     -- while
-               | for (Type|let) id "through" id Block           -- ForEach
-               | for (let|"int") id "=" Exp "till" Exp Block   -- For
-
-  IfStmt      = if Exp Block (elseif Exp Block)* (else Block)?         -- long
-              | if Exp Block                                           -- short
-              
-  Block        = "{" Statement* "}"
-  
-  ClassDec    = class id "{" ConstructorDec MethodDeclaration* "}"
-
-  ConstructorDec = construct "(" ListOf<Param, ","> ")" "{" Field* "}"
-  
-  Field       =  Type this "." id "=" Exp   
-
-  MethodDeclaration    = function id "(" ListOf<Param, ","> ")" "->" Type Block
+  Program   = Statement+
+  Statement = let id "=" Exp ";"                      -- vardec
+            | function id "(" Params ")" "=" Exp ";"  -- fundec
+            | id "=" Exp ";"                          -- assign
+            | print Exp ";"                           -- print
+            | while Exp Block                         -- while
+  Block     = "{" Statement* "}"
 
   Exp       = ("-" | "!") Exp7                        -- unary
             | Exp1 "?" Exp1 ":" Exp                   -- ternary
@@ -63,68 +22,26 @@ SussyScript {
             | Exp6
   Exp6      = Exp7 "**" Exp6                          -- binary
             | Exp7
-  Exp7    = 
-          | doublelit
-          | intlit
-          | true
-          | false
-          | ArrayLit
-          | MapLit
-          | Call
-          | DotExpression
-          | DotCall
-          | ObjectDec
-          | Exp6 "[" Exp "]"			-- subscript
-          | id
-          | "(" Exp ")"                         -- parens
-          | strlit  
+  Exp7      = num
+            | true
+            | false
+            | Call
+            | id                                      -- id
+            | "(" Exp ")"                             -- parens
 
-  Type 	        = "[" Type "]"		-- list
-  		| "{" Type "," Type "}" 	-- dictionary
-  		| id				-- id
+  Call      = id "(" Args ")"
+  Params    = ListOf<id, ",">
+  Args      = ListOf<Exp, ",">
 
-  ArrayLit      = "[" ListOf<Exp, ","> "]"
-  
-  MapLit        = "{" ListOf<MapEntry, ","> "}"
-  MapEntry      = Exp6 ":" Exp
-
-  intlit        = digit+
-  doublelit     = digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
-
-  relop   = "<=" | "<" | "!=" | "==" | ">=" | ">"
-          
-  let         = "varus" ~alnum
-  print       = "report" ~alnum
-  function    = "task" ~alnum
-  if          = "sus" ~alnum
-  elseif      = "mega sus" ~alnum
-  else        = "final sus" ~alnum
-  while       = "during" ~alnum
-  for         = "scan" ~alnum
-  return      = "vote" ~alnum
-  true        = "crewmate" ~alnum
-  false       = "imposter" ~alnum
-  class       = "role" ~alnum
-  break       = "eject" ~alnum
-  this        = "thus" ~alnum
-  construct   = "build" ~alnum
-  and         = "and" ~alnum
-  or          = "or" ~alnum
-  not         = "not" ~alnum
-  new         = "new" ~alnum
-  
-  space      += "$$" (~"\n" any)* ("\n" | end)                --comment
-
-  id          = ~keyword letter alnum*
- 
-  keyword     = let | print | function | else | elseif | if | while 
-              | for | break | return | true | false | this | new | construct | class          
-              
-  /*strlit    = ("\"" | "\'") char* ("~" applySyntactic<Exp> "~" char*)* ("\"" | "\'")*/
-  strlit      = "\"" char* "\""
-              
-  char        = ~"\\" ~"\"" ~"\n" ~"~" any
-  ObjectDec      = new id "(" ListOf<Exp, ","> ")"
-
- 
-} 
+  let       = "let" ~idchar
+  function  = "function" ~idchar
+  while     = "while" ~idchar
+  true      = "true" ~idchar
+  false     = "false" ~idchar
+  print     = "print" ~idchar
+  keyword   = let | function | while | true | false
+  num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+  id        = ~keyword letter idchar*
+  idchar    = letter | digit | "_"
+  space    += "//" (~"\n" any)*                       -- comment
+}
