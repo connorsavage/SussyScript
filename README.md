@@ -97,7 +97,7 @@ report “Hello world!”
 <td>
 
 ```javascript
-var x = 0;
+var x = 0
 ```
 
 </td>
@@ -136,7 +136,7 @@ sus x < 10 {
   vote 1
 } mega sus (x < 20) {
   vote -1
-} mega {
+} final sus {
   vote 0
 } 
 ```
