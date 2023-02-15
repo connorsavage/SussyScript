@@ -2,11 +2,11 @@ import assert from "assert/strict"
 import util from "util"
 import compile from "../src/compiler.js"
 
-const sampleProgram = "print 0;"
+const sampleProgram = "print 0"
 
 describe("The compiler", () => {
   it("throws when the output type is unknown", (done) => {
-    assert.throws(() => compile("print(0);", "blah"), /Unknown output type/)
+    assert.throws(() => compile("print(0)", "blah"), /Unknown output type/)
     done()
   })
   it("accepts the analyzed option", (done) => {

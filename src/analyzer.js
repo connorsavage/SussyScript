@@ -56,7 +56,7 @@ export default function analyze(sourceCode) {
     Program(body) {
       return new core.Program(body.rep())
     },
-    Statement_vardec(_let, id, _eq, initializer, _semicolon) {
+    Statement_vardec(_let, id, _eq, initializer) {
       // Analyze the initializer *before* adding the variable to the context,
       // because we don't want the variable to come into scope until after
       // the declaration. That is, "let x=x;" should be an error (unless x
@@ -66,16 +66,7 @@ export default function analyze(sourceCode) {
       context.add(id.sourceString, variable, id)
       return new core.VariableDeclaration(variable, initializerRep)
     },
-    Statement_fundec(
-      _fun,
-      id,
-      _open,
-      params,
-      _close,
-      _equals,
-      body,
-      _semicolon
-    ) {
+    Statement_fundec(_fun, id, _open, params, _close, body) {
       params = params.asIteration().children
       const fun = new core.Function(id.sourceString, params.length, true)
       // Add the function to the context before analyzing the body, because
@@ -91,12 +82,12 @@ export default function analyze(sourceCode) {
       context = context.parent
       return new core.FunctionDeclaration(fun, paramsRep, bodyRep)
     },
-    Statement_assign(id, _eq, expression, _semicolon) {
+    Statement_assign(id, _eq, expression) {
       const target = id.rep()
       check(!target.readOnly, `${target.name} is read only`, id)
       return new core.Assignment(target, expression.rep())
     },
-    Statement_print(_print, argument, _semicolon) {
+    Statement_print(_print, argument) {
       return new core.PrintStatement(argument.rep())
     },
     Statement_while(_while, test, body) {

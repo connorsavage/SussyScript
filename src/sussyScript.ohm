@@ -1,10 +1,13 @@
 SussyScript {
   Program   = Statement+
-  Statement = let id "=" Exp ";"                      -- vardec
-            | function id "(" Params ")" "=" Exp ";"  -- fundec
-            | id "=" Exp ";"                          -- assign
-            | print Exp ";"                           -- print
-            | while Exp Block                         -- while
+  Statement = let id "=" Exp                       -- vardec
+            | function id "(" Params ")" Block     -- fundec
+            | id "=" Exp                           -- assign
+            | print Exp                            -- print
+            | return Exp                           -- return
+            | while Exp Block                      -- while
+            | space
+
   Block     = "{" Statement* "}"
 
   Exp       = ("-" | "!") Exp7                        -- unary
@@ -33,15 +36,18 @@ SussyScript {
   Params    = ListOf<id, ",">
   Args      = ListOf<Exp, ",">
 
-  let       = "let" ~idchar
+  return    = "return" ~idchar
+
+  let       = "varus" ~idchar
   function  = "function" ~idchar
   while     = "while" ~idchar
   true      = "true" ~idchar
   false     = "false" ~idchar
+
   print     = "print" ~idchar
-  keyword   = let | function | while | true | false
+  keyword   = let | print | function | while | true | false
   num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   id        = ~keyword letter idchar*
   idchar    = letter | digit | "_"
-  space    += "//" (~"\n" any)*                       -- comment
+  space    += "cR" (~"\n" any)*                       -- comment
 }
