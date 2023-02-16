@@ -20,12 +20,12 @@ const syntaxErrors = [
   ["non-letter in an identifier", "ab😭c = 2", /Line 1, col 3/],
   ["malformed number", "x= 2.", /Line 1, col 6/],
   ["missing semicolon", "x = 3 y = 1", /Line 1, col 7/],
-  ["a missing right operand", "print(5 -", /Line 1, col 10/],
-  ["a non-operator", "print(7 * ((2 _ 3)", /Line 1, col 15/],
+  ["a missing right operand", "report(5 -", /Line 1, col 10/],
+  ["a non-operator", "report(7 * ((2 _ 3)", /Line 1, col 15/],
   ["an expression starting with a )", "x = )", /Line 1, col 5/],
   ["a statement starting with expression", "x * 5", /Line 1, col 3/],
-  ["an illegal statement on line 2", "print(5)\nx * 5", /Line 2, col 3/],
-  ["a statement starting with a )", "print(5)\n) * 5", /Line 2, col 1/],
+  ["an illegal statement on line 2", "report(5)\nx * 5", /Line 2, col 3/],
+  ["a statement starting with a )", "report(5)\n) * 5", /Line 2, col 1/],
   ["an expression starting with a *", "x = * 71", /Line 1, col 5/],
 ]
 
