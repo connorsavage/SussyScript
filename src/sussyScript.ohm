@@ -44,7 +44,7 @@ SussyScript {
   true      = "true" ~idchar
   false     = "false" ~idchar
 
-  print     = "print" ~idchar
+  print     = "report" ~idchar
   keyword   = let | print | function | while | true | false
   num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   id        = ~keyword letter idchar*
