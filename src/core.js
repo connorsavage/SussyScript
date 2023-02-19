@@ -79,6 +79,18 @@ export class Function {
   }
 }
 
+// export class IfStatement {
+//   constructor(test, consequent, alternate) {
+//     Object.assign(this, { test, consequent, alternate })
+//   }
+// }
+
+export class ReturnStatement {
+  constructor(expression) {
+    this.expression = expression
+  }
+}
+
 export const standardLibrary = Object.freeze({
   π: new Variable("π", true),
   sqrt: new Function("sqrt", 1, true),

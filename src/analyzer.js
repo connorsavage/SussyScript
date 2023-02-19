@@ -93,6 +93,9 @@ export default function analyze(sourceCode) {
     Statement_while(_while, test, body) {
       return new core.WhileStatement(test.rep(), body.rep())
     },
+    Statement_return(_return, argument) {
+      return new core.ReturnStatement(argument.rep())
+    },
     Block(_open, body, _close) {
       return body.rep()
     },
@@ -152,6 +155,17 @@ export default function analyze(sourceCode) {
     _iter(...children) {
       return children.map((child) => child.rep())
     },
+    // IfStatement(s) {
+    //   this.analyze(s.test)
+    //   for (let i = 0; i < s.test.length; i++) {
+    //     checkBoolean(s.test[i])
+    //     this.newChildContext().analyze(s.consequent[i])
+    //   }
+    //   if (s.alternate.constructor === Array) {
+    //     // It's a block of statements, make a new context
+    //     this.newChildContext().analyze(s.alternate)
+    //   }
+    // },
   })
 
   for (const [name, entity] of Object.entries(core.standardLibrary)) {

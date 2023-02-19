@@ -4,11 +4,15 @@ SussyScript {
             | function id "(" Params ")" Block     -- fundec
             | id "=" Exp                           -- assign
             | print Exp                            -- print
+            // | IfStmt
             | return Exp                           -- return
             | while Exp Block                      -- while
             | space
 
   Block     = "{" Statement* "}"
+
+  // IfStmt    = if Exp Block (elseif Exp Block)* (else Block)?         -- long
+  //           | if Exp Block                                           -- short
 
   Exp       = ("-" | "!") Exp7                        -- unary
             | Exp1 "?" Exp1 ":" Exp                   -- ternary
@@ -36,16 +40,30 @@ SussyScript {
   Params    = ListOf<id, ",">
   Args      = ListOf<Exp, ",">
 
-  return    = "return" ~idchar
+  Return      = return Exp 		                        -- exp 
 
-  let       = "varus" ~idchar
-  function  = "function" ~idchar
-  while     = "while" ~idchar
-  true      = "true" ~idchar
-  false     = "false" ~idchar
+  let         = "varus" ~alnum
+  print       = "report" ~alnum
+  function    = "task" ~alnum
+  if          = "sus" ~alnum
+  elseif      = "mega sus" ~alnum
+  else        = "final sus" ~alnum
+  while       = "during" ~alnum
+  for         = "scan" ~alnum
+  return      = "vote" ~alnum
+  true        = "crewmate" ~alnum
+  false       = "imposter" ~alnum
+  class       = "role" ~alnum
+  break       = "eject" ~alnum
+  this        = "thus" ~alnum
+  construct   = "build" ~alnum
+  and         = "and" ~alnum
+  or          = "or" ~alnum
+  not         = "not" ~alnum
+  new         = "new" ~alnum
 
-  print     = "report" ~idchar
-  keyword   = let | print | function | while | true | false
+  keyword     = let | print | function | else | elseif | if | while 
+            | for | break | return | true | false | this | new | construct | class      
   num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   id        = ~keyword letter idchar*
   idchar    = letter | digit | "_"
