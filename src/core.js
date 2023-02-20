@@ -31,9 +31,23 @@ export class Assignment {
   }
 }
 
-export class WhileStatement {
-  constructor(test, body) {
-    Object.assign(this, { test, body })
+export class IfStatement {
+  // Example: if x < 3 { print(100); } else { break; }
+  constructor(test, consequent, alternate) {
+    Object.assign(this, { test, consequent, alternate })
+  }
+}
+
+export class ShortIfStatement {
+  // Example: if x < 3 { print(100); }
+  constructor(test, consequent) {
+    Object.assign(this, { test, consequent })
+  }
+}
+
+export class ReturnStatement {
+  constructor(expression) {
+    Object.assign(this, { expression })
   }
 }
 
@@ -67,6 +81,18 @@ export class UnaryExpression {
   }
 }
 
+// Token objects are wrappers around the Nodes produced by Ohm. We use
+// them here just for simple things like numbers and identifiers. The
+// Ohm node will go in the "source" property.
+export class Token {
+  constructor(category, source) {
+    Object.assign(this, { category, source })
+  }
+  get lexeme() {
+    return this.source.contents
+  }
+}
+
 export class Variable {
   constructor(name, readOnly) {
     Object.assign(this, { name, readOnly })
@@ -79,27 +105,23 @@ export class Function {
   }
 }
 
-// export class IfStatement {
-//   constructor(test, consequent, alternate) {
-//     Object.assign(this, { test, consequent, alternate })
-//   }
-// }
-
-export class ReturnStatement {
-  constructor(expression) {
-    this.expression = expression
-  }
-}
-
 export const standardLibrary = Object.freeze({
   π: new Variable("π", true),
-  sqrt: new Function("sqrt", 1, true),
   sin: new Function("sin", 1, true),
+  sqrt: new Function("sqrt", 1, true),
   cos: new Function("cos", 1, true),
   exp: new Function("exp", 1, true),
   ln: new Function("ln", 1, true),
   hypot: new Function("hypot", 2, true),
 })
+
+// Throw an error message that takes advantage of Ohm's messaging
+export function error(message, token) {
+  if (token) {
+    throw new Error(`${token.source.getLineAndColumnMessage()}${message}`)
+  }
+  throw new Error(message)
+}
 
 // Return a compact and pretty string representation of the node graph,
 // taking care of cycles. Written here from scratch because the built-in
@@ -111,15 +133,26 @@ Program.prototype[util.inspect.custom] = function () {
   // Attach a unique integer tag to every node
   function tag(node) {
     if (tags.has(node) || typeof node !== "object" || node === null) return
-    tags.set(node, tags.size + 1)
-    for (const child of Object.values(node)) {
-      Array.isArray(child) ? child.forEach(tag) : tag(child)
+    if (node.constructor === Token) {
+      // Tokens are not tagged themselves, but their values might be
+      tag(node?.value)
+    } else {
+      // Non-tokens are tagged
+      tags.set(node, tags.size + 1)
+      for (const child of Object.values(node)) {
+        Array.isArray(child) ? child.forEach(tag) : tag(child)
+      }
     }
   }
 
   function* lines() {
     function view(e) {
       if (tags.has(e)) return `#${tags.get(e)}`
+      if (e?.constructor === Token) {
+        return `(${e.category},"${e.lexeme}"${
+          e.value ? "," + view(e.value) : ""
+        })`
+      }
       if (Array.isArray(e)) return `[${e.map(view)}]`
       return util.inspect(e)
     }

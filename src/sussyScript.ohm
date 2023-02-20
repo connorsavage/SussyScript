@@ -4,10 +4,10 @@ SussyScript {
             | function id "(" Params ")" Block     -- fundec
             | id "=" Exp                           -- assign
             | print Exp                            -- print
-            // | IfStmt
             | return Exp                           -- return
             | while Exp Block                      -- while
             | space
+            // | IfStmt
 
   Block     = "{" Statement* "}"
 
@@ -35,6 +35,9 @@ SussyScript {
             | Call
             | id                                      -- id
             | "(" Exp ")"                             -- parens
+            | strlit
+
+  strlit    = "\"" (~"\"" any)* "\""
 
   Call      = id "(" Args ")"
   Params    = ListOf<id, ",">
@@ -42,7 +45,7 @@ SussyScript {
 
   Return      = return Exp 		                        -- exp 
 
-  let         = "varus" ~alnum
+  let         = "letus" ~alnum
   print       = "report" ~alnum
   function    = "task" ~alnum
   if          = "sus" ~alnum
@@ -53,8 +56,8 @@ SussyScript {
   return      = "vote" ~alnum
   true        = "crewmate" ~alnum
   false       = "imposter" ~alnum
-  class       = "role" ~alnum
   break       = "eject" ~alnum
+  class       = "role" ~alnum
   this        = "thus" ~alnum
   construct   = "build" ~alnum
   and         = "and" ~alnum

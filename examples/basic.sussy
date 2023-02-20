@@ -1,1 +1,4 @@
-vote crewmate
+report("hello world")
+letus amongUs = "there is an imposter among us"
+report(amongUs)
+report(2)

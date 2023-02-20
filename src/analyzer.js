@@ -54,7 +54,7 @@ export default function analyze(sourceCode) {
 
   const analyzer = sussyScriptGrammar.createSemantics().addOperation("rep", {
     Program(body) {
-      return new core.Program(body.rep())
+      return new core.Program(body.children.map((s) => s.rep()))
     },
     Statement_vardec(_let, id, _eq, initializer) {
       // Analyze the initializer *before* adding the variable to the context,
@@ -154,6 +154,9 @@ export default function analyze(sourceCode) {
     },
     _iter(...children) {
       return children.map((child) => child.rep())
+    },
+    strlit(_open, chars, _close) {
+      return chars.sourceString
     },
     // IfStatement(s) {
     //   this.analyze(s.test)
