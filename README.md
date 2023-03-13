@@ -15,7 +15,7 @@ Hello crewmates! We have some new tasks that we need to complete before the impo
 - Object oriented
 - Built-in data structures
 - Objects are natively passed by copy for security
-- varus (equivalent to Java's var) can be used for type inference
+- letus can be used for type inference
 - String interpolation
 - Suspicious but detailed error messages
 
@@ -105,8 +105,7 @@ var x = 0
 <td>
 
 ```
-varus x = 0
-intus x = 0
+letus x = 0
 ```
 
 </td>
@@ -134,7 +133,7 @@ if (x < 10) {
 ```
 sus x < 10 {
   vote 1
-} mega sus (x < 20) {
+} mega sus x < 20 {
   vote -1
 } final sus {
   vote 0
@@ -159,7 +158,7 @@ function evenOrOdd(x){
 <td>
     
 ```
-task evenOrOdd(intus x) -> sussy {
+task evenOrOdd(x) {
     vote x % 2 == 0
 }
 ```
@@ -180,7 +179,7 @@ function add(a, b){
 <td>
     
 ```
-task add(intus a, intus b) -> intus { 
+task add(a, b) { 
    vote a + b
 }
 ```
