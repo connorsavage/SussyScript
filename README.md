@@ -11,10 +11,7 @@ Hello crewmates! We have some new tasks that we need to complete before the impo
 - Mix of Python & Javascript: No parenthesis in if/while/for statements, but does have brackets
 - Among Us-themed language and syntax
 - Everything is natively private
-- Static typing
-- Object oriented
-- Built-in data structures
-- Objects are natively passed by copy for security
+- Dynamic typing
 - letus can be used for type inference
 - String interpolation
 - Suspicious but detailed error messages
