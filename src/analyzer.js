@@ -56,15 +56,12 @@ export default function analyze(sourceCode) {
     Program(body) {
       return new core.Program(body.children.map((s) => s.rep()))
     },
-    Statement_vardec(_let, id, _eq, initializer) {
-      // Analyze the initializer *before* adding the variable to the context,
-      // because we don't want the variable to come into scope until after
-      // the declaration. That is, "let x=x;" should be an error (unless x
-      // was already defined in an outer scope.)
-      const initializerRep = initializer.rep()
-      const variable = new core.Variable(id.sourceString, false)
-      context.add(id.sourceString, variable, id)
-      return new core.VariableDeclaration(variable, initializerRep)
+    Statement_vardec(modifier, id, _eq, initializer) {
+      const e = initializer.rep()
+      const readOnly = modifier.sourceString === "constus"
+      const v = new core.Variable(id.sourceString, readOnly, e.type)
+      context.add(id.sourceString, v)
+      return new core.VariableDeclaration(v, e)
     },
     Statement_fundec(_fun, id, _open, params, _close, body) {
       params = params.asIteration().children

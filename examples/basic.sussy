@@ -1,4 +1,3 @@
-report("hello world")
-letus amongUs = "there is an imposter among us"
+constus amongUs = "there is an imposter among us"
+cR amongUs = "amongus" (this will cause an error!)
 report(amongUs)
-report(2)

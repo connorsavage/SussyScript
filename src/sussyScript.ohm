@@ -1,6 +1,6 @@
 SussyScript {
   Program   = Statement+
-  Statement = let id "=" Exp                       -- vardec
+  Statement = (let | const) id "=" Exp             -- vardec
             | function id "(" Params ")" Block     -- fundec
             | id "=" Exp                           -- assign
             | print Exp                            -- print
@@ -46,11 +46,11 @@ SussyScript {
   Return      = return Exp 		                        -- exp 
 
   let         = "letus" ~alnum
+  const       = "constus" ~alnum
   print       = "report" ~alnum
   function    = "task" ~alnum
-  if          = "sus" ~alnum
-  elseif      = "mega sus" ~alnum
-  else        = "final sus" ~alnum
+  if          = "mega" ~alnum
+  else        = "sus" ~alnum
   while       = "during" ~alnum
   for         = "scan" ~alnum
   return      = "vote" ~alnum
@@ -65,7 +65,7 @@ SussyScript {
   not         = "not" ~alnum
   new         = "new" ~alnum
 
-  keyword     = let | print | function | else | elseif | if | while 
+  keyword     = let | const| print | function | else | if | while 
             | for | break | return | true | false | this | new | construct | class      
   num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   id        = ~keyword letter idchar*
