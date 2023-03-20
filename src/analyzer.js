@@ -90,6 +90,12 @@ export default function analyze(sourceCode) {
     Statement_return(_return, argument) {
       return new core.ReturnStatement(argument.rep())
     },
+    Statement_shortreturn(_return) {
+      return new core.ShortReturnStatement()
+    },
+    Statement_break(_break) {
+      return new core.BreakStatement()
+    },
     //if
     IfStmt_long(_if, test, consequent, _else, alternate) {
       const testRep = test.rep()

@@ -52,6 +52,10 @@ export class WhileStatement {
   }
 }
 
+export class BreakStatement {
+  // Intentionally empty
+}
+
 export class RepeatStatement {
   // Example: repeat 10 { print("Hello"); }
   constructor(count, body) {
@@ -68,6 +72,10 @@ export class ReturnStatement {
   constructor(expression) {
     Object.assign(this, { expression })
   }
+}
+
+export class ShortReturnStatement {
+  // Intentionally empty
 }
 
 export class PrintStatement {

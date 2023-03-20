@@ -5,6 +5,8 @@ SussyScript {
             | id "=" Exp                           -- assign
             | print Exp                            -- print
             | return Exp                           -- return
+            | return                               -- shortreturn
+            | break                                -- break
             | space
             | IfStmt
             | LoopStmt
