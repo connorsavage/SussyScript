@@ -87,9 +87,6 @@ export default function analyze(sourceCode) {
     Statement_print(_print, argument) {
       return new core.PrintStatement(argument.rep())
     },
-    Statement_while(_while, test, body) {
-      return new core.WhileStatement(test.rep(), body.rep())
-    },
     Statement_return(_return, argument) {
       return new core.ReturnStatement(argument.rep())
     },
@@ -100,7 +97,6 @@ export default function analyze(sourceCode) {
       const alternateRep = alternate.rep()
       return new core.IfStatement(testRep, consequentRep, alternateRep)
     },
-
     IfStmt_elsif(_if, test, consequent, _else, alternate) {
       const testRep = test.rep()
       const consequentRep = consequent.rep()
@@ -108,11 +104,28 @@ export default function analyze(sourceCode) {
       const alternateRep = alternate.rep()
       return new core.IfStatement(testRep, consequentRep, alternateRep)
     },
-
     IfStmt_short(_if, test, consequent) {
       const testRep = test.rep()
       const consequentRep = consequent.rep()
       return new core.ShortIfStatement(testRep, consequentRep)
+    },
+    //loops
+    LoopStmt_while(_while, test, body) {
+      const t = test.rep()
+      const b = body.rep()
+      return new core.WhileStatement(t, b)
+    },
+    LoopStmt_repeat(_repeat, count, body) {
+      const c = count.rep()
+      const b = body.rep()
+      return new core.RepeatStatement(c, b)
+    },
+    LoopStmt_range(_for, id, _in, low, op, high, body) {
+      const [x, y] = [low.rep(), high.rep()]
+      const iterator = new core.Variable(id.sourceString, true)
+      context.add(id.sourceString, iterator)
+      const b = body.rep()
+      return new core.ForRangeStatement(iterator, x, op.rep(), y, b)
     },
     Block(_open, body, _close) {
       return body.rep()
