@@ -84,11 +84,11 @@ if (x < 10) {
 <td>
     
 ```
-mega x < 10 {
+sus x < 10 {
   vote 1
 } mega sus x < 20 {
   vote -1
-} sus {
+} mega {
   vote 0
 } 
 ```

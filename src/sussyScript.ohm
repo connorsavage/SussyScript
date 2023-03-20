@@ -7,12 +7,13 @@ SussyScript {
             | return Exp                           -- return
             | while Exp Block                      -- while
             | space
-            // | IfStmt
+            | IfStmt
 
   Block     = "{" Statement* "}"
 
-  // IfStmt    = if Exp Block (elseif Exp Block)* (else Block)?//+         -- long
-  //           | if Exp Block                                           -- short
+  IfStmt      = if Exp Block else Block                       --long
+              | if Exp Block else IfStmt                      --elsif
+              | if Exp Block                                  --short
 
   Exp       = ("-" | "!") Exp7                        -- unary
             | Exp1 "?" Exp1 ":" Exp                   -- ternary
@@ -49,8 +50,8 @@ SussyScript {
   const       = "constus" ~alnum
   print       = "report" ~alnum
   function    = "task" ~alnum
-  if          = "mega" ~alnum
-  else        = "sus" ~alnum
+  if          = "sus" ~alnum
+  else        = "mega" ~alnum
   while       = "during" ~alnum
   for         = "scan" ~alnum
   return      = "vote" ~alnum

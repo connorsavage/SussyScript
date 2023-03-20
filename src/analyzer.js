@@ -93,6 +93,27 @@ export default function analyze(sourceCode) {
     Statement_return(_return, argument) {
       return new core.ReturnStatement(argument.rep())
     },
+    //if
+    IfStmt_long(_if, test, consequent, _else, alternate) {
+      const testRep = test.rep()
+      const consequentRep = consequent.rep()
+      const alternateRep = alternate.rep()
+      return new core.IfStatement(testRep, consequentRep, alternateRep)
+    },
+
+    IfStmt_elsif(_if, test, consequent, _else, alternate) {
+      const testRep = test.rep()
+      const consequentRep = consequent.rep()
+      // Do NOT make a new context for the alternate!
+      const alternateRep = alternate.rep()
+      return new core.IfStatement(testRep, consequentRep, alternateRep)
+    },
+
+    IfStmt_short(_if, test, consequent) {
+      const testRep = test.rep()
+      const consequentRep = consequent.rep()
+      return new core.ShortIfStatement(testRep, consequentRep)
+    },
     Block(_open, body, _close) {
       return body.rep()
     },

@@ -1,3 +1,9 @@
 constus amongUs = "there is an imposter among us"
 cR amongUs = "amongus" (this will cause an error!)
-report(amongUs)
+sus (1 == 2) {
+    report "yes"
+} mega sus (2 == 3) {
+    report "eh"
+} mega {
+    report "nah"
+}
