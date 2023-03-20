@@ -10,11 +10,9 @@ Hello crewmates! We have some new tasks that we need to complete before the impo
 
 - Mix of Python & Javascript: No parenthesis in if/while/for statements, but does have brackets
 - Among Us-themed language and syntax
+- Everything is natively private
 - Dynamic typing
-- Object oriented
-- Built-in data structures
-- Objects are natively passed by copy for security
-- letus/constus (let/const equivalent in JavaScript) can be used for type inference
+- letus can be used for type inference
 - String interpolation
 - Suspicious but detailed error messages
 
@@ -88,7 +86,7 @@ if (x < 10) {
 ```
 mega x < 10 {
   vote 1
-} mega sus (x < 20) {
+} mega sus x < 20 {
   vote -1
 } sus {
   vote 0
