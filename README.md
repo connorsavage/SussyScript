@@ -16,52 +16,6 @@ Hello crewmates! We have some new tasks that we need to complete before the impo
 - String interpolation
 - Suspicious but detailed error messages
 
-### Sussy Types
-
-<table>
-  <tr>
-    <th>Javascript Type</th>
-    <th>Sussy Types</th>
-  </tr>
-  <tr>
-    <td>boolean (true/false)</td>
-    <td>sussy (crewmate/imposter)</td>
-  </tr>
-  <tr>
-    <td>string</td>
-    <td>comm</td>
-  </tr>
-  <tr>
-    <td>Number</td>
-    <td>intus</td>
-  </tr>
-  <tr>
-    <td>Number</td>
-    <td>doublus</td>
-  </tr>
-  <tr>
-    <td>object</td>
-    <td>admin</td>
-  </tr>
-</table>
-
-### Sussy (Data) Structures
-
-<table>
-  <tr>
-    <th>Data Structure</th>
-    <th>Sussy Structures</th>
-  </tr>
-  <tr>
-    <td>Array/List</td>
-    <td>list</td>
-  </tr>
-  <tr>
-    <td>Dictionary</td>
-    <td>map</td>
-  </tr>
-</table>
-
 ## Example Tasks
 
 ### Hello World
@@ -94,7 +48,8 @@ report “Hello world!”
 <td>
 
 ```javascript
-var x = 0
+let x = 0
+const y = 1
 ```
 
 </td>
@@ -103,6 +58,7 @@ var x = 0
 
 ```
 letus x = 0
+constus x = 0
 ```
 
 </td>
@@ -132,7 +88,7 @@ sus x < 10 {
   vote 1
 } mega sus x < 20 {
   vote -1
-} final sus {
+} mega {
   vote 0
 } 
 ```
@@ -223,72 +179,6 @@ for (var x = 0; x < 3; x++) {
 scan varus x = 0 till 3 {
     eject
 }
-```
-</td>
-</table>
-
-### Classes
-
-<table>
-<tr> <th>JavaScript</th><th>SussyScript</th><tr>
-</tr>
-<td>
-    
-```javascript
-class Rectangle {
-    constructor(height, width){ 
-        this.height = height;
-        this.width = width;
-    }
-    getWidth() {
-        return this.width
-    }
-    setWidth(newWidth) {
-        this.width = newWidth
-    }
-}
-let p = new Rectangle(3.0, 4);
-console.log(p.getWidth())
-p.setWidth(15)
-```
-</td>
-<td>
-    
-```
-role Rectangle {
-    build (doublus h, intus w) {
-        doublus thus.height = h
-        intus thus.width = w
-    }
-    task getWidth() -> intus {
-        vote thus.width
-    }
-    task setWidth(intus newWidth) -> none {
-        thus.width = newWidth
-    }
-}
-Rectangle p = new Rectangle(3.0, 4)
-report p.getWidth()
-p.setWidth(15)
-```
-</td>
-</table>
-
-### Data Skeletons Assignment
-
-<table>
-<tr> <th>JavaScript</th><th>SussyScript</th><tr>
-</tr>
-<td>
-    
-```javascript
-let fruits = ['Apple', 'Banana']
-```
-</td>
-<td>
-    
-```
-varus fruits = ['Apple', 'Banana']
 ```
 </td>
 </table>

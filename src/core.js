@@ -44,11 +44,38 @@ export class ShortIfStatement {
     Object.assign(this, { test, consequent })
   }
 }
+//loops
+export class WhileStatement {
+  // Example: while level != 90 { level += random(-3, 8); }
+  constructor(test, body) {
+    Object.assign(this, { test, body })
+  }
+}
+
+export class BreakStatement {
+  // Intentionally empty
+}
+
+export class RepeatStatement {
+  // Example: repeat 10 { print("Hello"); }
+  constructor(count, body) {
+    Object.assign(this, { count, body })
+  }
+}
+export class ForRangeStatement {
+  constructor(iterator, low, op, high, body) {
+    Object.assign(this, { iterator, low, high, op, body })
+  }
+}
 
 export class ReturnStatement {
   constructor(expression) {
     Object.assign(this, { expression })
   }
+}
+
+export class ShortReturnStatement {
+  // Intentionally empty
 }
 
 export class PrintStatement {

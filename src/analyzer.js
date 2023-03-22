@@ -56,15 +56,12 @@ export default function analyze(sourceCode) {
     Program(body) {
       return new core.Program(body.children.map((s) => s.rep()))
     },
-    Statement_vardec(_let, id, _eq, initializer) {
-      // Analyze the initializer *before* adding the variable to the context,
-      // because we don't want the variable to come into scope until after
-      // the declaration. That is, "let x=x;" should be an error (unless x
-      // was already defined in an outer scope.)
-      const initializerRep = initializer.rep()
-      const variable = new core.Variable(id.sourceString, false)
-      context.add(id.sourceString, variable, id)
-      return new core.VariableDeclaration(variable, initializerRep)
+    Statement_vardec(modifier, id, _eq, initializer) {
+      const e = initializer.rep()
+      const readOnly = modifier.sourceString === "constus"
+      const v = new core.Variable(id.sourceString, readOnly, e.type)
+      context.add(id.sourceString, v)
+      return new core.VariableDeclaration(v, e)
     },
     Statement_fundec(_fun, id, _open, params, _close, body) {
       params = params.asIteration().children
@@ -90,11 +87,51 @@ export default function analyze(sourceCode) {
     Statement_print(_print, argument) {
       return new core.PrintStatement(argument.rep())
     },
-    Statement_while(_while, test, body) {
-      return new core.WhileStatement(test.rep(), body.rep())
-    },
     Statement_return(_return, argument) {
       return new core.ReturnStatement(argument.rep())
+    },
+    Statement_shortreturn(_return) {
+      return new core.ShortReturnStatement()
+    },
+    Statement_break(_break) {
+      return new core.BreakStatement()
+    },
+    //if
+    IfStmt_long(_if, test, consequent, _else, alternate) {
+      const testRep = test.rep()
+      const consequentRep = consequent.rep()
+      const alternateRep = alternate.rep()
+      return new core.IfStatement(testRep, consequentRep, alternateRep)
+    },
+    IfStmt_elsif(_if, test, consequent, _else, alternate) {
+      const testRep = test.rep()
+      const consequentRep = consequent.rep()
+      // Do NOT make a new context for the alternate!
+      const alternateRep = alternate.rep()
+      return new core.IfStatement(testRep, consequentRep, alternateRep)
+    },
+    IfStmt_short(_if, test, consequent) {
+      const testRep = test.rep()
+      const consequentRep = consequent.rep()
+      return new core.ShortIfStatement(testRep, consequentRep)
+    },
+    //loops
+    LoopStmt_while(_while, test, body) {
+      const t = test.rep()
+      const b = body.rep()
+      return new core.WhileStatement(t, b)
+    },
+    LoopStmt_repeat(_repeat, count, body) {
+      const c = count.rep()
+      const b = body.rep()
+      return new core.RepeatStatement(c, b)
+    },
+    LoopStmt_range(_for, id, _in, low, op, high, body) {
+      const [x, y] = [low.rep(), high.rep()]
+      const iterator = new core.Variable(id.sourceString, true)
+      context.add(id.sourceString, iterator)
+      const b = body.rep()
+      return new core.ForRangeStatement(iterator, x, op.rep(), y, b)
     },
     Block(_open, body, _close) {
       return body.rep()
