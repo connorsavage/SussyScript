@@ -23,6 +23,10 @@ function check(condition, message, node) {
   if (!condition) error(message, node)
 }
 
+function mustBeInLoop(context, at) {
+  check(context.inLoop, "Break can only appear in a loop", at)
+}
+
 class Context {
   constructor(parent = null) {
     this.parent = parent
@@ -94,6 +98,7 @@ export default function analyze(sourceCode) {
       return new core.ShortReturnStatement()
     },
     Statement_break(_break) {
+      mustBeInLoop(context)
       return new core.BreakStatement()
     },
     //if
