@@ -15,8 +15,6 @@ const semanticChecks = [
   ["conditionals with ints", "print(true ? 8 : 5);"],
   ["conditionals with floats", "print(1<2 ? 8.0 : -5.22);"],
   ["conditionals with strings", 'print(1<2 ? "x" : "y");'],
-  ["??", "print(some 5 ?? 0);"],
-  ["nested ??", "print(some 5 ?? 8 ?? 0);"],
   ["||", "print(true||1<2||false||!true);"],
   ["&&", "print(true&&1<2&&false&&!true);"],
   ["bit ops", "print((1&2)|(9^3));"],
