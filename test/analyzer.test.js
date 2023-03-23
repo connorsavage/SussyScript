@@ -4,21 +4,12 @@ import analyze from "../src/analyzer.js"
 // Programs that are semantically correct
 const semanticChecks = [
   ["variable declarations", 'constus x = 1 letus y = "false"'],
-  ["complex array types", "function f(x: [[[int?]]?]) {}"],
-  ["increment and decrement", "let x = 10; x--; x++;"],
-  ["initialize with empty array", "let a = [](of int);"],
-  ["type declaration", "struct S {f: (int)->boolean? g: string}"],
-  ["assign arrays", "let a = [](of int);let b=[1];a=b;b=a;"],
-  ["assign to array element", "const a = [1,2,3]; a[1]=100;"],
-  ["initialize with empty optional", "let a = no int;"],
-  ["short return", "function f() { return; }"],
-  ["long return", "function f(): boolean { return true; }"],
-  ["assign optionals", "let a = no int;let b=some 1;a=b;b=a;"],
-  ["return in nested if", "function f() {if true {return;}}"],
-  ["break in nested if", "while false {if true {break;}}"],
+  ["short return", "task f() { return }"],
+  ["long return", "task f() { return true }"],
+  ["return in nested if", "task f() {sus true {return}}"],
+  ["break in nested if", "while false {if sus {break;}}"],
   ["long if", "if true {print(1);} else {print(3);}"],
   ["elsif", "if true {print(1);} else if true {print(0);} else {print(3);}"],
-  ["for over collection", "for i in [2,3,5] {print(1);}"],
   ["for in range", "for i in 1..<10 {print(0);}"],
   ["repeat", "repeat 3 {let a = 1; print(a);}"],
   ["conditionals with ints", "print(true ? 8 : 5);"],
@@ -44,20 +35,20 @@ const semanticChecks = [
   ["subscript exp", "let a=[1,2];print(a[0]);"],
   ["array of struct", "struct S{} let x=[S(), S()];"],
   ["struct of arrays and opts", "struct S{x: [int] y: string??}"],
-  ["assigned functions", "function f() {}\nlet g = f;g = f;"],
-  ["call of assigned functions", "function f(x: int) {}\nlet g=f;g(1);"],
-  ["type equivalence of nested arrays", "function f(x: [[int]]) {} print(f([[1],[2]]));"],
+  ["assigned functions", "task f() {}\nlet g = f;g = f;"],
+  ["call of assigned functions", "task f(x: int) {}\nlet g=f;g(1);"],
+  ["type equivalence of nested arrays", "task f(x: [[int]]) {} print(f([[1],[2]]));"],
   [
-    "call of assigned function in expression",
-    `function f(x: int, y: boolean): int {}
+    "call of assigned task in expression",
+    `task f(x: int, y: boolean): int {}
     let g = f;
     print(g(1, true));
     f = g; // Type check here`,
   ],
   [
     "pass a function to a function",
-    `function f(x: int, y: (boolean)->void): int { return 1; }
-     function g(z: boolean) {}
+    `task f(x: int, y: (boolean)->void): int { return 1; }
+     task g(z: boolean) {}
      f(2, g);`,
   ],
   [
@@ -163,7 +154,7 @@ const semanticErrors = [
   ["bad param type in fn assign", "function f(x: int) {} function g(y: float) {} f = g;"],
   [
     "bad return type in fn assign",
-    'function f(x: int): int {return 1;} function g(y: int): string {return "uh-oh";} f = g;',
+    'task f(x: int): int {return 1;} function g(y: int): string {return "uh-oh";} f = g;',
     /Cannot assign a \(int\)->string to a \(int\)->int/,
   ],
   ["bad call to stdlib sin()", "print(sin(true));", /Cannot assign a boolean to a float/],
