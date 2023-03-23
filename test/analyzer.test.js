@@ -3,7 +3,7 @@ import analyze from "../src/analyzer.js"
 
 // Programs that are semantically correct
 const semanticChecks = [
-  ["variable declarations", 'const x = 1; let y = "false";'],
+  ["variable declarations", 'constus x = 1 letus y = "false"'],
   ["complex array types", "function f(x: [[[int?]]?]) {}"],
   ["increment and decrement", "let x = 10; x--; x++;"],
   ["initialize with empty array", "let a = [](of int);"],

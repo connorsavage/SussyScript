@@ -11,6 +11,14 @@ import * as core from "./core.js"
 
 const sussyScriptGrammar = ohm.grammar(fs.readFileSync("src/sussyScript.ohm"))
 
+const INT = core.Type.INT
+const FLOAT = core.Type.FLOAT
+const STRING = core.Type.STRING
+const BOOLEAN = core.Type.BOOLEAN
+const ANY = core.Type.ANY
+const VOID = core.Type.VOID
+
+
 // Throw an error message that takes advantage of Ohm's messaging
 function error(message, node) {
   if (node) {
@@ -18,13 +26,56 @@ function error(message, node) {
   }
   throw new Error(message)
 }
-
 function check(condition, message, node) {
   if (!condition) error(message, node)
 }
-
+function mustHaveNumericType(e, at) {
+  check([INT, FLOAT].includes(e.type), "Expected a number", at)
+}
+function mustHaveNumericOrStringType(e, at) {
+  check([INT, FLOAT, STRING].includes(e.type), "Expected a number or string", at)
+}
+function mustHaveBooleanType(e, at) {
+  check(e.type === BOOLEAN, "Expected a boolean", at)
+}
+function mustHaveIntegerType(e, at) {
+  check(e.type === INT, "Expected an integer", at)
+}
+function mustBeTheSameType(e1, e2, at) {
+  check(equivalent(e1.type, e2.type), "Operands do not have the same type", at)
+}
+function equivalent(t1, t2) {
+  return (
+    t1 === t2 ||
+    (t1 instanceof core.OptionalType &&
+      t2 instanceof core.OptionalType &&
+      equivalent(t1.baseType, t2.baseType)) ||
+    (t1 instanceof core.ArrayType &&
+      t2 instanceof core.ArrayType &&
+      equivalent(t1.baseType, t2.baseType)) ||
+    (t1.constructor === core.FunctionType &&
+      t2.constructor === core.FunctionType &&
+      equivalent(t1.returnType, t2.returnType) &&
+      t1.paramTypes.length === t2.paramTypes.length &&
+      t1.paramTypes.every((t, i) => equivalent(t, t2.paramTypes[i])))
+  )
+}
+function mustNotBeReadOnly(e, at) {
+  check(!e.readOnly, `Cannot assign to constant ${e.name}`, at)
+}
 function mustBeInLoop(context, at) {
   check(context.inLoop, "Break can only appear in a loop", at)
+}
+
+function mustBeInAFunction(context, at) {
+  check(context.function, "Return can only appear in a function", at)
+}
+function mustNotReturnAnything(f, at) {
+  check(f.type.returnType === VOID, "Something should be returned", at)
+}
+
+function mustReturnSomething(f, at) {
+  check(f.type.returnType !== VOID, "Cannot return a value from this function", at)
 }
 
 class Context {
@@ -85,16 +136,20 @@ export default function analyze(sourceCode) {
     },
     Statement_assign(id, _eq, expression) {
       const target = id.rep()
-      check(!target.readOnly, `${target.name} is read only`, id)
+      mustNotBeReadOnly(target)
       return new core.Assignment(target, expression.rep())
     },
     Statement_print(_print, argument) {
       return new core.PrintStatement(argument.rep())
     },
     Statement_return(_return, argument) {
+      mustBeInAFunction(context, _return)
+      mustReturnSomething(context.function)
       return new core.ReturnStatement(argument.rep())
     },
     Statement_shortreturn(_return) {
+      mustBeInAFunction(context)
+      mustNotReturnAnything(context.function)
       return new core.ShortReturnStatement()
     },
     Statement_break(_break) {
@@ -104,12 +159,14 @@ export default function analyze(sourceCode) {
     //if
     IfStmt_long(_if, test, consequent, _else, alternate) {
       const testRep = test.rep()
+      mustHaveBooleanType(testRep)
       const consequentRep = consequent.rep()
       const alternateRep = alternate.rep()
       return new core.IfStatement(testRep, consequentRep, alternateRep)
     },
     IfStmt_elsif(_if, test, consequent, _else, alternate) {
       const testRep = test.rep()
+      mustHaveBooleanType(testRep)
       const consequentRep = consequent.rep()
       // Do NOT make a new context for the alternate!
       const alternateRep = alternate.rep()
@@ -117,22 +174,27 @@ export default function analyze(sourceCode) {
     },
     IfStmt_short(_if, test, consequent) {
       const testRep = test.rep()
+      mustHaveBooleanType(testRep, test)
       const consequentRep = consequent.rep()
       return new core.ShortIfStatement(testRep, consequentRep)
     },
     //loops
     LoopStmt_while(_while, test, body) {
       const t = test.rep()
+      mustHaveBooleanType(t)
       const b = body.rep()
       return new core.WhileStatement(t, b)
     },
     LoopStmt_repeat(_repeat, count, body) {
       const c = count.rep()
+      mustHaveIntegerType(c)
       const b = body.rep()
       return new core.RepeatStatement(c, b)
     },
     LoopStmt_range(_for, id, _in, low, op, high, body) {
       const [x, y] = [low.rep(), high.rep()]
+      mustHaveIntegerType(x)
+      mustHaveIntegerType(y)
       const iterator = new core.Variable(id.sourceString, true)
       context.add(id.sourceString, iterator)
       const b = body.rep()
@@ -142,28 +204,64 @@ export default function analyze(sourceCode) {
       return body.rep()
     },
     Exp_unary(op, operand) {
-      return new core.UnaryExpression(op.rep(), operand.rep())
+      const [o, x] = [op.sourceString, operand.rep()]
+      let type
+      if (o === "-") mustHaveNumericType(x), (type = x.type)
+      else if (o === "!") mustHaveBooleanType(x), (type = BOOLEAN)
+      return new core.UnaryExpression(o, x, type)
     },
     Exp_ternary(test, _questionMark, consequent, _colon, alternate) {
-      return new core.Conditional(test.rep(), consequent.rep(), alternate.rep())
+      const x = test.rep()
+      mustHaveBooleanType(x)
+      const [y, z] = [consequent.rep(), alternate.rep()]
+      mustBeTheSameType(y, z)
+      return new core.Conditional(x, y, z)
     },
     Exp1_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      let [x, o, ys] = [left.rep(), ops.rep()[0], right.rep()]
+      mustHaveBooleanType(x)
+      for (let y of ys) {
+        mustHaveBooleanType(y)
+        x = new core.BinaryExpression(o, x, y, BOOLEAN)
+      }
+      return x
     },
     Exp2_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      let [x, o, ys] = [left.rep(), ops.rep()[0], right.rep()]
+      mustHaveBooleanType(x)
+      for (let y of ys) {
+        mustHaveBooleanType(y)
+        x = new core.BinaryExpression(o, x, y, BOOLEAN)
+      }
+      return x
     },
     Exp3_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      const [x, o, y] = [left.rep(), op.sourceString, right.rep()]
+      if (["<", "<=", ">", ">="].includes(op.sourceString)) mustHaveNumericOrStringType(x)
+      mustBeTheSameType(x, y)
+      return new core.BinaryExpression(o, x, y, BOOLEAN)
     },
     Exp4_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      const [x, o, y] = [left.rep(), op.sourceString, right.rep()]
+      if (o === "+") {
+        mustHaveNumericOrStringType(x)
+      } else {
+        mustHaveNumericType(x)
+      }
+      mustBeTheSameType(x, y)
+      return new core.BinaryExpression(o, x, y, x.type)
     },
     Exp5_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      const [x, o, y] = [left.rep(), op.sourceString, right.rep()]
+      mustHaveNumericType(x)
+      mustBeTheSameType(x, y)
+      return new core.BinaryExpression(o, x, y, x.type)
     },
     Exp6_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      const [x, o, y] = [left.rep(), op.sourceString, right.rep()]
+      mustHaveNumericType(x)
+      mustBeTheSameType(x, y)
+      return new core.BinaryExpression(o, x, y, x.type)
     },
     Exp7_parens(_open, expression, _close) {
       return expression.rep()
