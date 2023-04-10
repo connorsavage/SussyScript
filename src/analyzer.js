@@ -206,8 +206,13 @@ export default function analyze(sourceCode) {
     Exp_unary(op, operand) {
       const [o, x] = [op.sourceString, operand.rep()]
       let type
-      if (o === "-") mustHaveNumericType(x), (type = x.type)
-      else if (o === "!") mustHaveBooleanType(x), (type = BOOLEAN)
+      if (o === "-"){ 
+        mustHaveNumericType(x, {at: operand})
+        type = x.type
+      } else if (o === "!"){
+        mustHaveBooleanType(x, {at: operand})
+        type = BOOLEAN
+      }
       return new core.UnaryExpression(o, x, type)
     },
     Exp_ternary(test, _questionMark, consequent, _colon, alternate) {
