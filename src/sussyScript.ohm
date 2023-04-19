@@ -66,16 +66,10 @@ SussyScript {
   true        = "crewmate" ~alnum
   false       = "imposter" ~alnum
   break       = "eject" ~alnum
-  class       = "role" ~alnum
-  this        = "thus" ~alnum
-  construct   = "build" ~alnum
-  and         = "and" ~alnum
-  or          = "or" ~alnum
-  not         = "not" ~alnum
-  new         = "new" ~alnum
+
 
   keyword     = let | const| print | function | else | if | while | repeat
-            | for | in | break | return | true | false | this | new | construct | class      
+            | for | in | break | return | true | false      
   num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   id        = ~keyword letter idchar*
   idchar    = letter | digit | "_"

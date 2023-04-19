@@ -42,27 +42,13 @@ export default function generate(program) {
     Program(p) {
       gen(p.statements)
     },
+
     VariableDeclaration(d) {
       // We don't care about const vs. let in the generated code! The analyzer has
       // already checked that we never updated a const, so let is always fine.
       output.push(`let ${gen(d.variable)} = ${gen(d.initializer)};`)
     },
-    TypeDeclaration(d) {
-      // The only type declaration in Carlos is the struct! Becomes a JS class.
-      output.push(`class ${gen(d.type)} {`)
-      output.push(`constructor(${gen(d.type.fields).join(",")}) {`)
-      for (let field of d.type.fields) {
-        output.push(`this[${JSON.stringify(gen(field))}] = ${gen(field)};`)
-      }
-      output.push("}")
-      output.push("}")
-    },
-    StructType(t) {
-      return targetName(t)
-    },
-    Field(f) {
-      return targetName(f)
-    },
+
     FunctionDeclaration(d) {
       output.push(`function ${gen(d.fun)}(${gen(d.params).join(", ")}) {`)
       gen(d.body)
@@ -77,12 +63,6 @@ export default function generate(program) {
     },
     Function(f) {
       return targetName(f)
-    },
-    Increment(s) {
-      output.push(`${gen(s.variable)}++;`)
-    },
-    Decrement(s) {
-      output.push(`${gen(s.variable)}--;`)
     },
     Assignment(s) {
       output.push(`${gen(s.target)} = ${gen(s.source)};`)
@@ -132,11 +112,6 @@ export default function generate(program) {
       gen(s.body)
       output.push("}")
     },
-    ForStatement(s) {
-      output.push(`for (let ${gen(s.iterator)} of ${gen(s.collection)}) {`)
-      gen(s.body)
-      output.push("}")
-    },
     Conditional(e) {
       return `((${gen(e.test)}) ? (${gen(e.consequent)}) : (${gen(e.alternate)}))`
     },
@@ -156,24 +131,6 @@ export default function generate(program) {
       }
       return `${e.op}(${operand})`
     },
-    EmptyOptional(e) {
-      return "undefined"
-    },
-    SubscriptExpression(e) {
-      return `${gen(e.array)}[${gen(e.index)}]`
-    },
-    ArrayExpression(e) {
-      return `[${gen(e.elements).join(",")}]`
-    },
-    EmptyArray(e) {
-      return "[]"
-    },
-    MemberExpression(e) {
-      const object = gen(e.object)
-      const field = JSON.stringify(gen(e.field))
-      const chain = e.op === "." ? "" : e.op
-      return `(${object}${chain}[${field}])`
-    },
     FunctionCall(c) {
       const targetCode = standardFunctions.has(c.callee)
         ? standardFunctions.get(c.callee)(gen(c.args))
@@ -183,9 +140,6 @@ export default function generate(program) {
         return targetCode
       }
       output.push(`${targetCode};`)
-    },
-    ConstructorCall(c) {
-      return `new ${gen(c.callee)}(${gen(c.args).join(", ")})`
     },
     Number(e) {
       return e
@@ -198,9 +152,6 @@ export default function generate(program) {
     },
     String(e) {
       return e
-    },
-    Array(a) {
-      return a.map(gen)
     },
   }
 
