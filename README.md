@@ -4,6 +4,8 @@
 
 Hello crewmates! We have some new tasks that we need to complete before the imposters get to us! These tasks requires the crew to do programming; fortunately, the admins just installed SussyScript to help with creating these sussy programs! SussyScript tasks should be easy to follow but also fun! Let's get to work so we can find out who is faking their tasks...
 
+SussyScript is a static and weakly typed coding language inspired by the popular party game Among Us! SussyScript takes influence from the coding conventions of JavaScript and Python, aimed to introduce coding to crewmates (and also beginner coders familiar with Among Us). Being a language targeted for beginners, SussyScript allows users to learn the basic functions of coding, such as looping and expression creation, with terms and keywords that allude to mechanics in Among Us! 
+
 ### Written by Mitchell Cootauco, Sebastian Cruz, Erin Hurlburt, and Connor Savage
 
 ### Imposterous Features:
@@ -11,8 +13,8 @@ Hello crewmates! We have some new tasks that we need to complete before the impo
 - Mix of Python & Javascript: No parenthesis in if/while/for statements, but does have brackets
 - Among Us-themed language and syntax
 - Everything is natively private
-- Dynamic typing
-- letus can be used for type inference
+- Static and weakly typed
+- letus/constus can be used for type inference
 - String interpolation
 - Suspicious but detailed error messages
 
