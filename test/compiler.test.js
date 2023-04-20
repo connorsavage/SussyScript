@@ -49,6 +49,12 @@ describe("The compiler", () => {
     done();
   });
 
+  it("accepts the optimized option", (done) => {
+    const compiled = compile(sampleProgram, "optimized");
+    assert(util.format(compiled).startsWith("   1 | Program"));
+    done();
+  });
+
   for (const testCase of testCases) {
     it(`correctly compiles the ${testCase.name} program`, () => {
       const actual = compile(testCase.source, "js");
