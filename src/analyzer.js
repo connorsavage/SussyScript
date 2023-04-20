@@ -82,7 +82,10 @@ class Context {
   constructor(parent = null) {
     this.parent = parent
     this.locals = new Map()
+    this.inLoop = false
+    this.function = null
   }
+  
   add(name, entity, node) {
     check(!this.locals.has(name), `${name} has already been declared`, node)
     this.locals.set(name, entity)
