@@ -20,14 +20,17 @@ const VOID = core.Type.VOID
 
 
 // Throw an error message that takes advantage of Ohm's messaging
-function error(message, node) {
-  if (node) {
-    throw new Error(`${node.source.getLineAndColumnMessage()}${message}`)
-  }
-  throw new Error(message)
-}
+// function error(message, node) {
+//   if (node) {
+//     throw new Error(`${node.source.getLineAndColumnMessage()}${message}`)
+//   }
+//   throw new Error(message)
+// }
 function check(condition, message, node) {
-  if (!condition) error(message, node)
+  if (!condition) {
+    const prefix = node.at.source.getLineAndColumnMessage()
+    throw new Error('${prefix}${message}')
+  }
 }
 function mustHaveNumericType(e, at) {
   check([INT, FLOAT].includes(e.type), "Expected a number", at)
@@ -43,6 +46,10 @@ function mustHaveIntegerType(e, at) {
 }
 function mustBeTheSameType(e1, e2, at) {
   check(equivalent(e1.type, e2.type), "Operands do not have the same type", at)
+}
+function mustHaveDistinctFields(type, at) {
+  const fieldNames = new Set(type.fields.map(f => f.name))
+  must(fieldNames.size === type.fields.length, "Fields must be distinct", at)
 }
 function equivalent(t1, t2) {
   return (
@@ -85,7 +92,7 @@ class Context {
     this.inLoop = false
     this.function = null
   }
-  
+
   add(name, entity, node) {
     check(!this.locals.has(name), `${name} has already been declared`, node)
     this.locals.set(name, entity)
@@ -114,6 +121,26 @@ export default function analyze(sourceCode) {
     Program(body) {
       return new core.Program(body.children.map((s) => s.rep()))
     },
+    // VarDecl(modifier, id, _eq, exp) {
+    //   const initializer = exp.rep()
+    //   const readOnly = modifier.sourceString === "const"
+    //   const variable = new core.Variable(id.sourceString, readOnly, initializer.type)
+    //   mustNotAlreadyBeDeclared(id.sourceString, { at: id })
+    //   context.add(id.sourceString, variable)
+    //   return new core.VariableDeclaration(variable, initializer)
+    // },
+    // TypeDecl(_struct, id, _left, fields, _right) {
+    //   // To allow recursion, enter into context without any fields yet
+    //   const type = new core.StructType(id.sourceString, [])
+    //   mustNotAlreadyBeDeclared(id.sourceString, { at: id })
+    //   context.add(id.sourceString, type)
+    //   // Now add the types as you parse and analyze. Since we already added
+    //   // the struct type itself into the context, we can use it in fields.
+    //   type.fields = fields.children.map(field => field.rep())
+    //   mustHaveDistinctFields(type, { at: id })
+    //   mustNotBeSelfContaining(type, { at: id })
+    //   return new core.TypeDeclaration(type)
+    // },
     Statement_vardec(modifier, id, _eq, initializer) {
       const e = initializer.rep()
       const readOnly = modifier.sourceString === "constus"
@@ -294,7 +321,10 @@ export default function analyze(sourceCode) {
     false(_) {
       return false
     },
-    num(_whole, _point, _fraction, _e, _sign, _exponent) {
+    num(_digits) {
+      return BigInt(this.sourceString)
+    },
+    floatlit(_whole, _point, _fraction, _e, _sign, _exponent) {
       return Number(this.sourceString)
     },
     _terminal() {

@@ -37,6 +37,7 @@ SussyScript {
   Exp6      = Exp7 "**" Exp6                          -- binary
             | Exp7
   Exp7      = num
+            | floatlit
             | true
             | false
             | Call
@@ -68,9 +69,10 @@ SussyScript {
   break       = "eject" ~alnum
 
 
-  keyword     = let | const| print | function | else | if | while | repeat
+  keyword   = let | const| print | function | else | if | while | repeat
             | for | in | break | return | true | false      
-  num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+  num       = digit+
+  floatlit  = digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
   id        = ~keyword letter idchar*
   idchar    = letter | digit | "_"
   space    += "cR" (~"\n" any)*                       -- comment
