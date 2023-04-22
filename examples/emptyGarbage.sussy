@@ -1,0 +1,12 @@
+task emptyGarbage(numOfLeaves) {
+    during numOfLeaves > 0 {
+        numOfLeaves = numOfLeaves - 1
+        report "leaf removed\n"
+    }
+}
+
+emptyGarbage(3)
+cR output would look like: 
+cR leaf removed
+cR leaf removed
+cR leaf removed

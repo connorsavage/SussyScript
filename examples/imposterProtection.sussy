@@ -1,0 +1,10 @@
+constus yellowIsCrewmate = crewmate
+
+task exampleImposterHackAttempt(isCrewmate) {
+    isCrewmate = imposter
+    vote "I knew it! They're isCrewmate boolean is" + isCrewmate
+}
+
+report exampleImposterHackAttempt(yellowIsCrewmate)
+
+cR Take notes crewmates, an imposter would not be able to hack yellow's data because it can't be changed!
