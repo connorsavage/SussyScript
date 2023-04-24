@@ -206,4 +206,15 @@ cR insert sussy comment
 </td>
 </table>
 
+### Types of Semantic Errors
+- Declaring a variable that has already been declared
+- Return outside of a function
+- Non-boolean value in conditional
+- Non-boolean value in while loop
+- Incorrect number of function parameters
+- Incompaible type comparison
+- Repeating and For loop with something other than integer value assigned
+- Differen types in ternary conditional return
+- "And"/"Or" conditionals not having boolean values
+
 ### [Website Link](https://seevass.github.io/)
