@@ -1,4 +1,8 @@
-function constantFoldBinaryExpression(node) {
+export default function optimize(node) {
+  return node
+}
+
+/*function constantFoldBinaryExpression(node) {
   const left = constantFold(node.left);
   const right = constantFold(node.right);
 
@@ -42,4 +46,4 @@ function constantFold(node) {
 
 export default function optimize(node) {
   return constantFold(node);
-}
+}*/
