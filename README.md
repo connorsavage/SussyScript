@@ -22,7 +22,7 @@ SussyScript is a static and weakly typed coding language inspired by the popular
 
 ## Example Tasks
 
-### Hello World
+### Printing
 
 <table>
 <tr> <th>JavaScript</th><th>SussyScript</th><tr>
