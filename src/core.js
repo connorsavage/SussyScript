@@ -148,7 +148,14 @@ export class Function {
   }
 }
 
+
 export const standardLibrary = Object.freeze({
+  int: Type.INT,
+  float: Type.FLOAT,
+  boolean: Type.BOOLEAN,
+  string: Type.STRING,
+  void: Type.VOID,
+  any: Type.ANY,
   π: new Variable("π", true),
   sin: new Function("sin", 1, true),
   sqrt: new Function("sqrt", 1, true),
@@ -157,6 +164,11 @@ export const standardLibrary = Object.freeze({
   ln: new Function("ln", 1, true),
   hypot: new Function("hypot", 2, true),
 })
+
+String.prototype.type = Type.STRING
+Number.prototype.type = Type.FLOAT
+BigInt.prototype.type = Type.INT
+Boolean.prototype.type = Type.BOOLEAN
 
 // Throw an error message that takes advantage of Ohm's messaging
 export function error(message, token) {

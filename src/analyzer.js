@@ -28,7 +28,7 @@ const VOID = core.Type.VOID
 // }
 function check(condition, message, node) {
   if (!condition) {
-    const prefix = node.at.source.getLineAndColumnMessage()
+    //const prefix = node.at.source.getLineAndColumnMessage()
     throw new Error('${prefix}${message}')
   }
 }
