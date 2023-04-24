@@ -18,6 +18,8 @@ SussyScript is a static and weakly typed coding language inspired by the popular
 - String interpolation
 - Suspicious but detailed error messages
 
+### [Ohm Grammar](https://github.com/connorsavage/SussyScript/blob/main/src/sussyScript.ohm)
+
 ## Example Tasks
 
 ### Hello World
