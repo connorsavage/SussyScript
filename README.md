@@ -216,5 +216,8 @@ cR insert sussy comment
 - Repeating and For loop with something other than integer value assigned
 - Differen types in ternary conditional return
 - "And"/"Or" conditionals not having boolean values
+- Break outside of loops
+- Calling a function or method that is not initialized
+- Use of non-initialized variables
 
 ### [Website Link](https://seevass.github.io/)
