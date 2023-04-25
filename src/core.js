@@ -102,12 +102,6 @@ export class BinaryExpression {
   }
 }
 
-export class UnaryExpression {
-  constructor(op, operand) {
-    Object.assign(this, { op, operand })
-  }
-}
-
 // Token objects are wrappers around the Nodes produced by Ohm. We use
 // them here just for simple things like numbers and identifiers. The
 // Ohm node will go in the "source" property.

@@ -121,26 +121,6 @@ export default function analyze(sourceCode) {
     Program(body) {
       return new core.Program(body.children.map((s) => s.rep()))
     },
-    // VarDecl(modifier, id, _eq, exp) {
-    //   const initializer = exp.rep()
-    //   const readOnly = modifier.sourceString === "const"
-    //   const variable = new core.Variable(id.sourceString, readOnly, initializer.type)
-    //   mustNotAlreadyBeDeclared(id.sourceString, { at: id })
-    //   context.add(id.sourceString, variable)
-    //   return new core.VariableDeclaration(variable, initializer)
-    // },
-    // TypeDecl(_struct, id, _left, fields, _right) {
-    //   // To allow recursion, enter into context without any fields yet
-    //   const type = new core.StructType(id.sourceString, [])
-    //   mustNotAlreadyBeDeclared(id.sourceString, { at: id })
-    //   context.add(id.sourceString, type)
-    //   // Now add the types as you parse and analyze. Since we already added
-    //   // the struct type itself into the context, we can use it in fields.
-    //   type.fields = fields.children.map(field => field.rep())
-    //   mustHaveDistinctFields(type, { at: id })
-    //   mustNotBeSelfContaining(type, { at: id })
-    //   return new core.TypeDeclaration(type)
-    // },
     Statement_vardec(modifier, id, _eq, initializer) {
       const e = initializer.rep()
       const readOnly = modifier.sourceString === "constus"
