@@ -4,7 +4,7 @@ task susDetector(name, sussynessLevel) {
     } mega sus(sussynessLevel > 50) {
         report "I don't know, " + name + " is looking a little sus..."
     } mega {
-        report "I literally saw " + name "do Med Bay, I think they're in the clear!"
+        report "I literally saw " + name + " do Med Bay, I think they're in the clear!"
     }
 }
 
