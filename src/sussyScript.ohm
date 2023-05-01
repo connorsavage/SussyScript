@@ -36,8 +36,8 @@ SussyScript {
             | Exp6
   Exp6      = Exp7 "**" Exp6                          -- binary
             | Exp7
-  Exp7      = num
-            | floatlit
+  Exp7      = floatlit
+            | num
             | true
             | false
             | Call

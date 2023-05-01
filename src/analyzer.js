@@ -18,7 +18,6 @@ const BOOLEAN = core.Type.BOOLEAN
 const ANY = core.Type.ANY
 const VOID = core.Type.VOID
 
-
 // Throw an error message that takes advantage of Ohm's messaging
 // function error(message, node) {
 //   if (node) {
@@ -29,14 +28,18 @@ const VOID = core.Type.VOID
 function check(condition, message, node) {
   if (!condition) {
     //const prefix = node.at.source.getLineAndColumnMessage()
-    throw new Error('${prefix}${message}')
+    throw new Error("${prefix}${message}")
   }
 }
 function mustHaveNumericType(e, at) {
   check([INT, FLOAT].includes(e.type), "Expected a number", at)
 }
 function mustHaveNumericOrStringType(e, at) {
-  check([INT, FLOAT, STRING].includes(e.type), "Expected a number or string", at)
+  check(
+    [INT, FLOAT, STRING].includes(e.type),
+    "Expected a number or string",
+    at
+  )
 }
 function mustHaveBooleanType(e, at) {
   check(e.type === BOOLEAN, "Expected a boolean", at)
@@ -48,7 +51,7 @@ function mustBeTheSameType(e1, e2, at) {
   check(equivalent(e1.type, e2.type), "Operands do not have the same type", at)
 }
 function mustHaveDistinctFields(type, at) {
-  const fieldNames = new Set(type.fields.map(f => f.name))
+  const fieldNames = new Set(type.fields.map((f) => f.name))
   must(fieldNames.size === type.fields.length, "Fields must be distinct", at)
 }
 function equivalent(t1, t2) {
@@ -82,7 +85,11 @@ function mustNotReturnAnything(f, at) {
 }
 
 function mustReturnSomething(f, at) {
-  check(f.type.returnType !== VOID, "Cannot return a value from this function", at)
+  check(
+    f.type.returnType !== VOID,
+    "Cannot return a value from this function",
+    at
+  )
 }
 
 class Context {
@@ -159,7 +166,6 @@ export default function analyze(sourceCode) {
       mustBeInAFunction(context, readOnly)
       mustReturnSomething(context.function)
       return new core.ReturnStatement(readOnly, e)
-
     },
     Statement_shortreturn(_return) {
       const readOnly = _return.sourceString === "vote"
@@ -222,11 +228,11 @@ export default function analyze(sourceCode) {
     Exp_unary(op, operand) {
       const [o, x] = [op.sourceString, operand.rep()]
       let type
-      if (o === "-"){ 
-        mustHaveNumericType(x, {at: operand})
+      if (o === "-") {
+        mustHaveNumericType(x, { at: operand })
         type = x.type
-      } else if (o === "!"){
-        mustHaveBooleanType(x, {at: operand})
+      } else if (o === "!") {
+        mustHaveBooleanType(x, { at: operand })
         type = BOOLEAN
       }
       return new core.UnaryExpression(o, x, type)
@@ -258,7 +264,8 @@ export default function analyze(sourceCode) {
     },
     Exp3_binary(left, op, right) {
       const [x, o, y] = [left.rep(), op.sourceString, right.rep()]
-      if (["<", "<=", ">", ">="].includes(op.sourceString)) mustHaveNumericOrStringType(x)
+      if (["<", "<=", ">", ">="].includes(op.sourceString))
+        mustHaveNumericOrStringType(x)
       mustBeTheSameType(x, y)
       return new core.BinaryExpression(o, x, y, BOOLEAN)
     },
@@ -339,6 +346,6 @@ export default function analyze(sourceCode) {
     context.locals.set(name, entity)
   }
   const match = sussyScriptGrammar.match(sourceCode)
-  if (!match.succeeded()) error(match.message)
+  if (!match.succeeded()) core.error(match.message)
   return analyzer(match).rep()
 }
