@@ -180,7 +180,7 @@ for (var x = 0; x < 3; x++) {
 <td>
     
 ```
-scan varus x = 0 till 3 {
+scan varus in 0 till 3 {
     eject
 }
 ```
