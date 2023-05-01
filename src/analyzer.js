@@ -153,14 +153,20 @@ export default function analyze(sourceCode) {
       return new core.PrintStatement(argument.rep())
     },
     Statement_return(_return, argument) {
-      mustBeInAFunction(context, _return)
+      const e = argument.rep()
+      const readOnly = _return.sourceString === "vote"
+      context.add(_return.sourceString, readOnly)
+      mustBeInAFunction(context, readOnly)
       mustReturnSomething(context.function)
-      return new core.ReturnStatement(argument.rep())
+      return new core.ReturnStatement(readOnly, e)
+
     },
     Statement_shortreturn(_return) {
+      const readOnly = _return.sourceString === "vote"
+      context.add(_return.sourceString, readOnly)
       mustBeInAFunction(context)
       mustNotReturnAnything(context.function)
-      return new core.ShortReturnStatement()
+      return new core.ShortReturnStatement(readOnly)
     },
     Statement_break(_break) {
       mustBeInLoop(context)

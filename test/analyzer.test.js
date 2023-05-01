@@ -4,21 +4,21 @@ import analyze from "../src/analyzer.js"
 // Programs that are semantically correct
 const semanticChecks = [
   ["variable declarations", 'constus x = 1 letus y = "false"'],
-  ["short return", "task f() { return }"],
-  ["long return", "task f() { return true }"],
-  ["return in nested if", "task f() {sus true {return}}"],
+  ["short return", "task f() { vote }"],
+  ["long return", "task f() { vote true }"],
+  ["return in nested if", "task f() {sus true {vote}}"],
   ["break in nested if", "while false {if sus {break;}}"],
-  ["long if", "if true {print(1);} else {print(3);}"],
-  ["elsif", "if true {print(1);} else if true {print(0);} else {print(3);}"],
-  ["for in range", "for i in 1..<10 {print(0);}"],
-  ["repeat", "repeat 3 {let a = 1; print(a);}"],
-  ["conditionals with ints", "print(true ? 8 : 5);"],
-  //["conditionals with floats", "print(1<2 ? 8.0 : -5.22);"],
-  ["conditionals with strings", 'print(1<2 ? "x" : "y");'],
-  ["||", "print(true||1<2||false||!true);"],
-  ["&&", "print(true&&1<2&&false&&!true);"],
-  ["bit ops", "print((1&2)|(9^3));"],
-  ["relations", 'print(1<=2 && "x">"y" && 3.5<1.2);'],
+  ["long if", "if true {report 1;} else {report 3;}"],
+  ["elsif", "if true {report 1;} else if true {report 0;} else {report 3;}"],
+  ["for in range", "for i in 1..<10 {report 0;}"],
+  ["repeat", "repeat 3 {let a = 1; report a;}"],
+  ["conditionals with ints", "report true ? 8 : 5;"],
+  //["conditionals with floats", "report 1<2 ? 8.0 : -5.22;"],
+  ["conditionals with strings", 'report 1<2 ? "x" : "y";'],
+  ["||", "report true||1<2||false||!true;"],
+  ["&&", "report true&&1<2&&false&&!true;"],
+  ["bit ops", "report (1&2)|(9^3);"],
+  ["relations", 'report 1<=2 && "x">"y" && 3.5<1.2);'],
   //["ok to == arrays", "print([1]==[5,8]);"],
   //["ok to != arrays", "print([1]!=[5,8]);"],
   //["shifts", "print(1<<3<<5<<8>>2>>0);"],
@@ -45,14 +45,14 @@ const semanticChecks = [
   ],
   [
     "pass a function to a function",
-    `task f(x: int, y: (boolean)->void): int { return 1; }
+    `task f(x: int, y: (boolean)->void): int { vote 1; }
      task g(z: boolean) {}
      f(2, g);`,
   ],
   [
     "function return types",
-    `function square(x: int): int { return x * x; }
-     function compose(): (int)->int { return square; }`,
+    `function square(x: int): int { vote x * x; }
+     function compose(): (int)->int { vote square; }`,
   ],
   ["function assign", "function f() {} let g = f; let h = [g, f]; print(h[0]());"],
   ["struct parameters", "struct S {} function f(x: S) {}"],
@@ -86,14 +86,14 @@ const semanticErrors = [
     "while true {function f() {break;}}",
     /Break can only appear in a loop/,
   ],
-  ["return outside function", "return;", /Return can only appear in a function/],
+  ["return outside function", "vote;", /Return can only appear in a function/],
   [
     "return value from void function",
-    "function f() {return 1;}",
+    "function f() {vote 1;}",
     /Cannot return a value/,
   ],
-  ["return nothing from non-void", "function f(): int {return;}", /should be returned/],
-  ["return type mismatch", "function f(): int {return false;}", /boolean to a int/],
+  ["return nothing from non-void", "function f(): int {vote;}", /should be returned/],
+  ["return type mismatch", "function f(): int {vote false;}", /boolean to a int/],
   ["non-boolean short if test", "if 1 {}", /Expected a boolean/],
   ["non-boolean if test", "if 1 {} else {}", /Expected a boolean/],
   ["non-boolean while test", "while 1 {}", /Expected a boolean/],
@@ -144,20 +144,20 @@ const semanticErrors = [
   ],
   [
     "function type mismatch",
-    `function f(x: int, y: (boolean)->void): int { return 1; }
-     function g(z: boolean): int { return 5; }
+    `function f(x: int, y: (boolean)->void): int { vote 1; }
+     function g(z: boolean): int { vote 5; }
      f(2, g);`,
     /Cannot assign a \(boolean\)->int to a \(boolean\)->void/,
   ],
   ["bad param type in fn assign", "function f(x: int) {} function g(y: float) {} f = g;"],
   [
     "bad return type in fn assign",
-    'task f(x: int): int {return 1;} function g(y: int): string {return "uh-oh";} f = g;',
+    'task f(x: int): int {vote 1;} function g(y: int): string {vote "uh-oh";} f = g;',
     /Cannot assign a \(int\)->string to a \(int\)->int/,
   ],
   ["bad call to stdlib sin()", "print(sin(true));", /Cannot assign a boolean to a float/],
   ["Non-type in param", "let x=1;function f(y:x){}", /Type expected/],
-  ["Non-type in return type", "let x=1;function f():x{return 1;}", /Type expected/],
+  ["Non-type in return type", "let x=1;function f():x{vote 1;}", /Type expected/],
   ["Non-type in field type", "let x=1;struct S {y:x}", /Type expected/],
 ]
 
