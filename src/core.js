@@ -97,8 +97,14 @@ export class Conditional {
 }
 
 export class BinaryExpression {
-  constructor(op, left, right) {
-    Object.assign(this, { op, left, right })
+  constructor(op, left, right, type) {
+    Object.assign(this, { op, left, right, type })
+  }
+}
+
+export class UnaryExpression {
+  constructor(op, operand, type) {
+    Object.assign(this, { op, operand, type })
   }
 }
 
@@ -115,8 +121,8 @@ export class Token {
 }
 
 export class Variable {
-  constructor(name, readOnly) {
-    Object.assign(this, { name, readOnly })
+  constructor(name, readOnly, type) {
+    Object.assign(this, { name, readOnly, type })
   }
 }
 
@@ -142,7 +148,6 @@ export class Function {
   }
 }
 
-
 export const standardLibrary = Object.freeze({
   int: Type.INT,
   float: Type.FLOAT,
@@ -150,7 +155,7 @@ export const standardLibrary = Object.freeze({
   string: Type.STRING,
   void: Type.VOID,
   any: Type.ANY,
-  π: new Variable("π", true),
+  π: new Variable("π", true, Type.FLOAT),
   sin: new Function("sin", 1, true),
   sqrt: new Function("sqrt", 1, true),
   cos: new Function("cos", 1, true),

@@ -142,6 +142,7 @@ export default function analyze(sourceCode) {
       // we want to allow functions to be recursive
       context.add(id.sourceString, fun, id)
       context = new Context(context)
+      context.function = fun
       const paramsRep = params.map((p) => {
         let variable = new core.Variable(p.sourceString, true)
         context.add(p.sourceString, variable, p)
@@ -164,14 +165,12 @@ export default function analyze(sourceCode) {
       const readOnly = _return.sourceString === "vote"
       context.add(_return.sourceString, readOnly)
       mustBeInAFunction(context, readOnly)
-      mustReturnSomething(context.function)
       return new core.ReturnStatement(readOnly, e)
     },
     Statement_shortreturn(_return) {
       const readOnly = _return.sourceString === "vote"
       context.add(_return.sourceString, readOnly)
       mustBeInAFunction(context)
-      mustNotReturnAnything(context.function)
       return new core.ShortReturnStatement(readOnly)
     },
     Statement_break(_break) {
@@ -204,7 +203,10 @@ export default function analyze(sourceCode) {
     LoopStmt_while(_while, test, body) {
       const t = test.rep()
       mustHaveBooleanType(t)
+      context = new Context()
+      context.inLoop = true
       const b = body.rep()
+      context = context.parent
       return new core.WhileStatement(t, b)
     },
     LoopStmt_repeat(_repeat, count, body) {
@@ -245,22 +247,16 @@ export default function analyze(sourceCode) {
       return new core.Conditional(x, y, z)
     },
     Exp1_binary(left, op, right) {
-      let [x, o, ys] = [left.rep(), ops.rep()[0], right.rep()]
+      let [x, o, y] = [left.rep(), op.rep(), right.rep()]
       mustHaveBooleanType(x)
-      for (let y of ys) {
-        mustHaveBooleanType(y)
-        x = new core.BinaryExpression(o, x, y, BOOLEAN)
-      }
-      return x
+      mustHaveBooleanType(y)
+      return new core.BinaryExpression(o, x, y, BOOLEAN)
     },
     Exp2_binary(left, op, right) {
-      let [x, o, ys] = [left.rep(), ops.rep()[0], right.rep()]
+      let [x, o, y] = [left.rep(), op.rep(), right.rep()]
       mustHaveBooleanType(x)
-      for (let y of ys) {
-        mustHaveBooleanType(y)
-        x = new core.BinaryExpression(o, x, y, BOOLEAN)
-      }
-      return x
+      mustHaveBooleanType(y)
+      return new core.BinaryExpression(o, x, y, BOOLEAN)
     },
     Exp3_binary(left, op, right) {
       const [x, o, y] = [left.rep(), op.sourceString, right.rep()]
