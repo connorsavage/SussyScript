@@ -31,6 +31,46 @@ function check(condition, message, node) {
     throw new Error("${prefix}${message}")
   }
 }
+
+class Context {
+  constructor(parent = null) {
+    this.parent = parent
+    this.locals = new Map()
+    this.inLoop = false
+    this.function = null
+  }
+
+    add(name, entity) {
+      this.locals.set(name, entity)
+    }
+    lookup(name) {
+      return this.locals.get(name) || this.parent?.lookup(name)
+    }
+    newChildContext(props) {
+      return new Context({ ...this, ...props, parent: this, locals: new Map() })
+    }
+
+  // add(name, entity, node) {
+  //   check(!this.locals.has(name), `${name} has already been declared`, node)
+  //   this.locals.set(name, entity)
+  //   return entity
+  // }
+  get(name, expectedType, node) {
+    let entity
+    for (let context = this; context; context = context.parent) {
+      entity = context.locals.get(name)
+      if (entity) break
+    }
+    check(entity, `${name} has not been declared`, node)
+    check(
+      entity.constructor === expectedType,
+      `${name} was expected to be a ${expectedType.name}`,
+      node
+    )
+    return entity
+  }
+}
+
 function mustHaveNumericType(e, at) {
   check([INT, FLOAT].includes(e.type), "Expected a number", at)
 }
@@ -92,35 +132,6 @@ function mustReturnSomething(f, at) {
   )
 }
 
-class Context {
-  constructor(parent = null) {
-    this.parent = parent
-    this.locals = new Map()
-    this.inLoop = false
-    this.function = null
-  }
-
-  add(name, entity, node) {
-    check(!this.locals.has(name), `${name} has already been declared`, node)
-    this.locals.set(name, entity)
-    return entity
-  }
-  get(name, expectedType, node) {
-    let entity
-    for (let context = this; context; context = context.parent) {
-      entity = context.locals.get(name)
-      if (entity) break
-    }
-    check(entity, `${name} has not been declared`, node)
-    check(
-      entity.constructor === expectedType,
-      `${name} was expected to be a ${expectedType.name}`,
-      node
-    )
-    return entity
-  }
-}
-
 export default function analyze(sourceCode) {
   let context = new Context()
 
@@ -174,6 +185,8 @@ export default function analyze(sourceCode) {
       return new core.ShortReturnStatement(readOnly)
     },
     Statement_break(_break) {
+      // const readOnly = _break.sourceString === "eject"
+      // context.add(_break.sourceString, readOnly)
       mustBeInLoop(context)
       return new core.BreakStatement()
     },

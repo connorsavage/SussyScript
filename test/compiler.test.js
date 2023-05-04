@@ -17,22 +17,22 @@ const testCases = [
   },
   {
     name: "Variable assignment and usage",
-    source: "let x = 10\nreport x + 2",
-    expected: "let x_1 = 10;\nconsole.log(x_1 + 2);",
+    source: "letus x = 10 report x + 2",
+    expected: "let x_1 = 10; console.log(x_1 + 2);",
   },
   {
     name: "Conditional statements",
-    source: "if 3 > 2 { report 1 } else { report 0 }",
+    source: "sus 3 > 2 { report 1 } mega { report 0 }",
     expected: "if (3 > 2) { console.log(1); } else { console.log(0); }",
   },
   {
     name: "While loop",
-    source: "let x = 0\nwhile x < 3 { report x\nx = x + 1 }",
-    expected: "let x_1 = 0;\nwhile (x_1 < 3) { console.log(x_1); x_1 = x_1 + 1; }",
+    source: "letus x = 0 during x < 3 { report x x = x + 1 }",
+    expected: "let x_1 = 0; while (x_1 < 3) { console.log(x_1); x_1 = x_1 + 1; }",
   },
   {
     name: "Function definition and call",
-    source: "function add(a: int, b: int): int { return a + b }\nreport add(5, 3)",
+    source: "task add(a, b) { report a + b } report add(5, 3)",
     expected: "function add_1(a_2, b_3) { return a_2 + b_3; }\nconsole.log(add_1(5, 3));",
   },
 ];

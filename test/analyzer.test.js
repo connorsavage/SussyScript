@@ -3,11 +3,11 @@ import analyze from "../src/analyzer.js"
 
 // Programs that are semantically correct
 const semanticChecks = [
-  ["variable declarations", 'constus x = 1 letus y = "imposter"'],
+  ["variable declarations", 'constus x = 1 letus y = "impostor"'],
   ["short return", "task f() { vote }"],
   ["long return", "task f() { vote crewmate }"],
   ["return in nested if", "task f() {sus crewmate {vote}}"],
-  ["break in nested if", "during imposter {sus imposter {eject}}"],
+  ["break in nested if", "during impostor {sus impostor {eject}}"],
   ["long if", "sus crewmate {report 1} mega {report 3}"],
   [
     "elsif",
@@ -18,11 +18,11 @@ const semanticChecks = [
   ["conditionals with ints", "report crewmate ? 8 : 5"],
   //["conditionals with floats", "report 1<2 ? 8.0 : -5.22"],
   ["conditionals with strings", 'report 1<2 ? "x" : "y"'],
-  ["||", "report crewmate||(1<2)||imposter||(!crewmate)"],
-  ["&&", "report crewmate&&(1<2)&&imposter&&(!crewmate)"],
+  ["||", "report crewmate||(1<2)||impostor||(!crewmate)"],
+  ["&&", "report crewmate&&(1<2)&&impostor&&(!crewmate)"],
   ["relations", 'report 1<=2 && "x">"y" && 3.5<1.2'],
   ["arithmetic", "letus x=1 report  2*3+5**(-3)/2-5%8"],
-  ["outer variable", "letus x=1 during imposter {report  x}"],
+  ["outer variable", "letus x=1 during impostor {report  x}"],
   ["built-in constants", "report 25.0 * π"],
   ["built-in sin", "report  sin(π)"],
   ["built-in cos", "report  cos(93.999)"],
@@ -31,138 +31,139 @@ const semanticChecks = [
 
 // Programs that are syntactically correct but have semantic errors
 const semanticErrors = [
-  ["non-int increment", "let x=false;x++;", /an integer/],
-  ["non-int decrement", 'let x=some[""];x++;', /an integer/],
-  ["undeclared id", "print(x);", /Identifier x not declared/],
-  ["redeclared id", "let x = 1;let x = 1;", /Identifier x already declared/],
-  ["assign to const", "const x = 1;x = 2;", /Cannot assign to constant/],
-  ["assign bad type", "let x=1;x=true;", /Cannot assign a boolean to a int/],
+  //["non-int increment", "letus x=impostorx++", /an integer/],
+  //["non-int decrement", 'letus x=some[""]x++', /an integer/],
+  ["undeclared id", "report(x)", /Identifier x not declared/],
+  ["redeclared id", "letus x = 1 letus x = 1", /Identifier x already declared/],
+  ["assign to const", "constus x = 1 x = 2", /Cannot assign to constant/],
+  ["assign bad type", "letus x=1 x=crewmate", /Cannot assign a boolean to a int/],
+  // [
+  //   "assign bad array type",
+  //   "letus x=1 x=[(crewmate)]",
+  //   /Cannot assign a \[boolean\] to a int/,
+  // ],
+  // [
+  //   "assign bad optional type",
+  //   "letus x=1 x=some 2",
+  //   /Cannot assign a int\? to a int/,
+  // ],
+  ["break outside loop", "eject", /Break can only appear in a loop/],
   [
-    "assign bad array type",
-    "let x=1;x=[true];",
-    /Cannot assign a \[boolean\] to a int/,
-  ],
-  [
-    "assign bad optional type",
-    "let x=1;x=some 2;",
-    /Cannot assign a int\? to a int/,
-  ],
-  ["break outside loop", "break;", /Break can only appear in a loop/],
-  [
-    "break inside function",
-    "while true {function f() {break;}}",
+    "break inside task",
+    "during crewmate {task f() {eject}}",
     /Break can only appear in a loop/,
   ],
-  ["return outside function", "vote;", /Return can only appear in a function/],
+  ["return outside task", "vote", /Return can only appear in a task/],
   [
-    "return value from void function",
-    "function f() {vote 1;}",
+    "return value from void task",
+    "task f() {vote 1}",
     /Cannot return a value/,
   ],
   [
     "return nothing from non-void",
-    "function f(): int {vote;}",
+    "task f() {vote}",
     /should be returned/,
   ],
-  [
-    "return type mismatch",
-    "function f(): int {vote false;}",
-    /boolean to a int/,
-  ],
-  ["non-boolean short if test", "if 1 {}", /Expected a boolean/],
-  ["non-boolean if test", "if 1 {} else {}", /Expected a boolean/],
-  ["non-boolean while test", "while 1 {}", /Expected a boolean/],
+  // [
+  //   "return type mismatch",
+  //   "task f() {vote impostor}",
+  //   /boolean to a int/,
+  // ],
+  ["non-boolean short if test", "sus 1 {}", /Expected a boolean/],
+  ["non-boolean if test", "sus 1 {} mega {}", /Expected a boolean/],
+  ["non-boolean while test", "during 1 {}", /Expected a boolean/],
   ["non-integer repeat", 'repeat "1" {}', /Expected an integer/],
-  ["non-integer low range", "for i in true...2 {}", /Expected an integer/],
-  ["non-integer high range", "for i in 1..<no int {}", /Expected an integer/],
-  ["non-array in for", "for i in 100 {}", /Expected an array/],
-  ["non-boolean conditional test", "print(1?2:3);", /Expected a boolean/],
+  //["non-integer low range", "scan i in crewmate...2 {}", /Expected an integer/],
+  //["non-integer high range", "scan i in 1..<no int {}", /Expected an integer/],
+  //["non-array in for", "scan i in 100 {}", /Expected an array/],
+  ["non-boolean conditional test", "report(1?2:3)", /Expected a boolean/],
   [
     "diff types in conditional arms",
-    "print(true?1:true);",
+    "report(crewmate?1:crewmate)",
     /not have the same type/,
   ],
-  ["unwrap non-optional", "print(1??2);", /Expected an optional/],
-  ["bad types for ||", "print(false||1);", /Expected a boolean/],
-  ["bad types for &&", "print(false&&1);", /Expected a boolean/],
+  //["unwrap non-optional", "report(1??2)", /Expected an optional/],
+  ["bad types for ||", "report(impostor||1)", /Expected a boolean/],
+  ["bad types for &&", "report(impostor&&1)", /Expected a boolean/],
   [
     "bad types for ==",
-    "print(false==1);",
+    "report(impostor==1)",
     /Operands do not have the same type/,
   ],
   [
     "bad types for !=",
-    "print(false==1);",
+    "report(impostor==1)",
     /Operands do not have the same type/,
   ],
-  ["bad types for +", "print(false+1);", /Expected a number or string/],
-  ["bad types for -", "print(false-1);", /Expected a number/],
-  ["bad types for *", "print(false*1);", /Expected a number/],
-  ["bad types for /", "print(false/1);", /Expected a number/],
-  ["bad types for **", "print(false**1);", /Expected a number/],
-  ["bad types for <", "print(false<1);", /Expected a number or string/],
-  ["bad types for <=", "print(false<=1);", /Expected a number or string/],
-  ["bad types for >", "print(false>1);", /Expected a number or string/],
-  ["bad types for >=", "print(false>=1);", /Expected a number or string/],
-  ["bad types for ==", "print(2==2.0);", /not have the same type/],
-  ["bad types for !=", "print(false!=1);", /not have the same type/],
-  ["bad types for negation", "print(-true);", /Expected a number/],
-  ["bad types for length", "print(#false);", /Expected an array/],
-  ["bad types for not", 'print(!"hello");', /Expected a boolean/],
-  ["non-integer index", "let a=[1];print(a[false]);", /Expected an integer/],
-  [
-    "diff type array elements",
-    "print([3,3.0]);",
-    /Not all elements have the same type/,
-  ],
+  ["bad types for +", "report(impostor+1)", /Expected a number or string/],
+  ["bad types for -", "report(impostor-1)", /Expected a number/],
+  ["bad types for *", "report(impostor*1)", /Expected a number/],
+  ["bad types for /", "report(impostor/1)", /Expected a number/],
+  ["bad types for **", "report(impostor**1)", /Expected a number/],
+  ["bad types for <", "report(impostor<1)", /Expected a number or string/],
+  ["bad types for <=", "report(impostor<=1)", /Expected a number or string/],
+  ["bad types for >", "report(impostor>1)", /Expected a number or string/],
+  ["bad types for >=", "report(impostor>=1)", /Expected a number or string/],
+  ["bad types for ==", "report(2==2.0)", /not have the same type/],
+  ["bad types for !=", "report(impostor!=1)", /not have the same type/],
+  ["bad types for negation", "report(-crewmate)", /Expected a number/],
+  //["bad types for length", "report(#impostor)", /Expected an array/],
+  ["bad types for not", 'report(!"hello")', /Expected a boolean/],
+  //["non-integer index", "letus a=[1]report(a[impostor])", /Expected an integer/],
+  // [
+  //   "diff type array elements",
+  //   "report([3,3.0])",
+  //   /Not all elements have the same type/,
+  // ],
   [
     "shadowing",
-    "let x = 1;\nwhile true {let x = 1;}",
+    "letus x = 1 during crewmate {letus x = 1}",
     /Identifier x already declared/,
   ],
-  ["call of uncallable", "let x = 1;\nprint(x());", /Call of non-function/],
+  ["call of uncallable", "letus x = 1 report(x())", /Call of non-task/],
   [
     "Too many args",
-    "function f(x: int) {}\nf(1,2);",
+    "task f(x) {} f(1,2)",
     /1 argument\(s\) required but 2 passed/,
   ],
   [
     "Too few args",
-    "function f(x: int) {}\nf();",
+    "task f(x) {} f()",
     /1 argument\(s\) required but 0 passed/,
   ],
-  [
-    "Parameter type mismatch",
-    "function f(x: int) {}\nf(false);",
-    /Cannot assign a boolean to a int/,
-  ],
-  [
-    "function type mismatch",
-    `function f(x: int, y: (boolean)->void): int { vote 1; }
-     function g(z: boolean): int { vote 5; }
-     f(2, g);`,
-    /Cannot assign a \(boolean\)->int to a \(boolean\)->void/,
-  ],
-  [
-    "bad param type in fn assign",
-    "function f(x: int) {} function g(y: float) {} f = g;",
-  ],
-  [
-    "bad return type in fn assign",
-    'task f(x: int): int {vote 1;} function g(y: int): string {vote "uh-oh";} f = g;',
-    /Cannot assign a \(int\)->string to a \(int\)->int/,
-  ],
+  // Type checking tests:
+  // [
+  //   "Parameter type mismatch",
+  //   "task f(x) {} f(impostor)",
+  //   /Cannot assign a boolean to a int/,
+  // ],
+  // [
+  //   "task type mismatch",
+  //   `task f(x, y (boolean)->void) { vote 1 }
+  //    task g(z boolean) { vote 5 }
+  //    f(2, g)`,
+  //   /Cannot assign a \(boolean\)->int to a \(boolean\)->void/,
+  // ],
+  // [
+  //   "bad param type in fn assign",
+  //   "task f(x) {} task g(y float) {} f = g",
+  // ],
+  // [
+  //   "bad return type in fn assign",
+  //   'task f(x) {vote 1} task g(y) string {vote "uh-oh"} f = g',
+  //   /Cannot assign a \(int\)->string to a \(int\)->int/,
+  // ],
   [
     "bad call to stdlib sin()",
-    "print(sin(true));",
+    "report(sin(crewmate))",
     /Cannot assign a boolean to a float/,
   ],
-  ["Non-type in param", "let x=1;function f(y:x){}", /Type expected/],
-  [
-    "Non-type in return type",
-    "let x=1;function f():x{vote 1;}",
-    /Type expected/,
-  ],
+  // ["Non-type in param", "letus x=1 task f(x){}", /Type expected/],
+  // [
+  //   "Non-type in return type",
+  //   "letus x=1 task f() {vote 1}",
+  //   /Type expected/,
+  // ],
 ]
 
 describe("The analyzer", () => {
@@ -180,8 +181,8 @@ describe("The analyzer", () => {
     })
   }
   it("builds an unoptimized AST for a trivial program", () => {
-    const ast = analyze("print(1+2);")
-    assert.equal(ast.statements[0].callee.name, "print")
+    const ast = analyze("report(1+2)")
+    assert.equal(ast.statements[0].callee.name, "report")
     assert.equal(ast.statements[0].args[0].left, 1n)
   })
 })

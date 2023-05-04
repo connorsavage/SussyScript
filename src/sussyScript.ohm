@@ -4,9 +4,9 @@ SussyScript {
             | function id "(" Params ")" Block     -- fundec
             | id "=" Exp                           -- assign
             | print Exp                            -- print
+            | break                                -- break
             | return Exp                           -- return
             | return                               -- shortreturn
-            | break                                -- break
             | space
             | IfStmt
             | LoopStmt
