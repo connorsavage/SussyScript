@@ -40,21 +40,15 @@ class Context {
     this.function = null
   }
 
-    add(name, entity) {
-      this.locals.set(name, entity)
-    }
-    lookup(name) {
-      return this.locals.get(name) || this.parent?.lookup(name)
-    }
-    // newChildContext(props) {
-    //   return new Context({ ...this, ...props, parent: this, locals: new Map() })
-    // }
-
-  // add(name, entity, node) {
-  //   check(!this.locals.has(name), `${name} has already been declared`, node)
-  //   this.locals.set(name, entity)
-  //   return entity
-  // }
+  add(name, entity) {
+    this.locals.set(name, entity)
+  }
+  lookup(name) {
+    return this.locals.get(name) || this.parent?.lookup(name)
+  }
+  newChildContext(props) {
+    return new Context({ ...this, ...props, parent: this, locals: new Map() })
+  }
   get(name, expectedType, node) {
     let entity
     for (let context = this; context; context = context.parent) {
@@ -109,7 +103,7 @@ function equivalent(t1, t2) {
 function mustNotBeReadOnly(e, at) {
   check(!e.readOnly, `Cannot assign to constant ${e.name}`, at)
 }
-function mustBeInLoop(at) {
+function mustBeInLoop(context, at) {
   check(context.inLoop, "Break can only appear in a loop", at)
 }
 
@@ -177,7 +171,7 @@ export default function analyze(sourceCode) {
     Statement_break(_break) {
       // const readOnly = _break.sourceString === "eject"
       // context.add(_break.sourceString, readOnly)
-      mustBeInLoop({at: _break})
+      mustBeInLoop(context)
       return new core.BreakStatement()
     },
     //if
