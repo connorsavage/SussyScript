@@ -109,7 +109,7 @@ function equivalent(t1, t2) {
 function mustNotBeReadOnly(e, at) {
   check(!e.readOnly, `Cannot assign to constant ${e.name}`, at)
 }
-function mustBeInLoop(context, at) {
+function mustBeInLoop(at) {
   check(context.inLoop, "Break can only appear in a loop", at)
 }
 
@@ -177,7 +177,7 @@ export default function analyze(sourceCode) {
     Statement_break(_break) {
       // const readOnly = _break.sourceString === "eject"
       // context.add(_break.sourceString, readOnly)
-      mustBeInLoop(context)
+      mustBeInLoop({at: _break})
       return new core.BreakStatement()
     },
     //if
