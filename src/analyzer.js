@@ -117,6 +117,9 @@ function mustBeInLoop(context, at) {
   check(context.inLoop, "Break can only appear in a loop", at)
 }
 
+function mustNotAlreadyBeDeclared(context, name, at) {
+  check(!context.lookup(name), `Identifier ${name} already declared`, at)
+}
 function mustBeInAFunction(context, at) {
   check(context.function, "Return can only appear in a function", at)
 }
@@ -143,6 +146,7 @@ export default function analyze(sourceCode) {
       const e = initializer.rep()
       const readOnly = modifier.sourceString === "constus"
       const v = new core.Variable(id.sourceString, readOnly, e.type)
+      mustNotAlreadyBeDeclared(context, id.sourceString, { at: id })
       context.add(id.sourceString, v)
       return new core.VariableDeclaration(v, e)
     },
@@ -164,9 +168,10 @@ export default function analyze(sourceCode) {
       return new core.FunctionDeclaration(fun, paramsRep, bodyRep)
     },
     Statement_assign(id, _eq, expression) {
+      const source = expression.rep()
       const target = id.rep()
       mustNotBeReadOnly(target)
-      return new core.Assignment(target, expression.rep())
+      return new core.Assignment(target, source)
     },
     Statement_print(_print, argument) {
       return new core.PrintStatement(argument.rep())
@@ -314,9 +319,6 @@ export default function analyze(sourceCode) {
       return new core.Call(fun, argsRep)
     },
     id(_first, _rest) {
-      const entity = context.lookup(id.sourceString)
-      mustHaveBeenFound(entity, id.sourceString, { at: id })
-      entityMustBeAType(entity, { at: id })
       // Designed to get here only for ids in expressions
       return context.get(this.sourceString, core.Variable, this)
     },

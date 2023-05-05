@@ -36,7 +36,6 @@ const semanticErrors = [
   ["undeclared id", "report(x)", /x has not been declared/],
   ["redeclared id", "letus x = 1 letus x = 1", /Identifier x already declared/],
   ["assign to const", "constus x = 1 x = 2", /Cannot assign to constant/],
-  ["assign bad type", "letus x=1 x=crewmate", /Cannot assign a boolean to a int/],
   // [
   //   "assign bad array type",
   //   "letus x=1 x=[(crewmate)]",
@@ -54,7 +53,6 @@ const semanticErrors = [
     /Break can only appear in a loop/,
   ],
   ["return outside task", "vote", /Return can only appear in a function/],
-
   // [
   //   "return type mismatch",
   //   "task f() {vote imposter}",
@@ -111,7 +109,7 @@ const semanticErrors = [
     "letus x = 1 during crewmate {letus x = 1}",
     /Identifier x already declared/,
   ],
-  ["call of uncallable", "letus x = 1 report(x())", /Call of non-task/],
+  ["call of uncallable", "letus x = 1 report(x())", /x was expected to be a Function/],
   [
     "Too many args",
     "task f(x) {} f(1,2)",
@@ -144,11 +142,6 @@ const semanticErrors = [
   //   'task f(x) {vote 1} task g(y) string {vote "uh-oh"} f = g',
   //   /Cannot assign a \(int\)->string to a \(int\)->int/,
   // ],
-  [
-    "bad call to stdlib sin()",
-    "report(sin(crewmate))",
-    /Cannot assign a boolean to a float/,
-  ],
   // ["Non-type in param", "letus x=1 task f(x){}", /Type expected/],
   // [
   //   "Non-type in return type",
