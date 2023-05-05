@@ -46,9 +46,9 @@ class Context {
     lookup(name) {
       return this.locals.get(name) || this.parent?.lookup(name)
     }
-    newChildContext(props) {
-      return new Context({ ...this, ...props, parent: this, locals: new Map() })
-    }
+    // newChildContext(props) {
+    //   return new Context({ ...this, ...props, parent: this, locals: new Map() })
+    // }
 
   // add(name, entity, node) {
   //   check(!this.locals.has(name), `${name} has already been declared`, node)
@@ -90,10 +90,6 @@ function mustHaveIntegerType(e, at) {
 function mustBeTheSameType(e1, e2, at) {
   check(equivalent(e1.type, e2.type), "Operands do not have the same type", at)
 }
-function mustHaveDistinctFields(type, at) {
-  const fieldNames = new Set(type.fields.map((f) => f.name))
-  must(fieldNames.size === type.fields.length, "Fields must be distinct", at)
-}
 function equivalent(t1, t2) {
   return (
     t1 === t2 ||
@@ -122,17 +118,6 @@ function mustNotAlreadyBeDeclared(context, name, at) {
 }
 function mustBeInAFunction(context, at) {
   check(context.function, "Return can only appear in a function", at)
-}
-function mustNotReturnAnything(f, at) {
-  check(f.type.returnType === VOID, "Something should be returned", at)
-}
-
-function mustReturnSomething(f, at) {
-  check(
-    f.type.returnType !== VOID,
-    "Cannot return a value from this function",
-    at
-  )
 }
 
 export default function analyze(sourceCode) {

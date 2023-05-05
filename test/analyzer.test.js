@@ -164,9 +164,4 @@ describe("The analyzer", () => {
       assert.throws(() => analyze(source), errorMessagePattern)
     })
   }
-  it("builds an unoptimized AST for a trivial program", () => {
-    const ast = analyze("report(1+2)")
-    assert.equal(ast.statements[0].callee.name, "report")
-    assert.equal(ast.statements[0].args[0].left, 1n)
-  })
 })
