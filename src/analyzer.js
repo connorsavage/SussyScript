@@ -28,7 +28,7 @@ const VOID = core.Type.VOID
 function check(condition, message, node) {
   if (!condition) {
     //const prefix = node.at.source.getLineAndColumnMessage()
-    throw new Error("${prefix}${message}")
+    throw new Error(`${message}`)
   }
 }
 
@@ -215,10 +215,10 @@ export default function analyze(sourceCode) {
     //loops
     LoopStmt_while(_while, test, body) {
       const t = test.rep()
+      const b = body.rep()
       mustHaveBooleanType(t)
       context = new Context()
       context.inLoop = true
-      const b = body.rep()
       context = context.parent
       return new core.WhileStatement(t, b)
     },
@@ -314,6 +314,9 @@ export default function analyze(sourceCode) {
       return new core.Call(fun, argsRep)
     },
     id(_first, _rest) {
+      const entity = context.lookup(id.sourceString)
+      mustHaveBeenFound(entity, id.sourceString, { at: id })
+      entityMustBeAType(entity, { at: id })
       // Designed to get here only for ids in expressions
       return context.get(this.sourceString, core.Variable, this)
     },

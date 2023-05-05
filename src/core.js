@@ -142,6 +142,30 @@ export class Type {
   }
 }
 
+export class OptionalType extends Type {
+  // Example: string?
+  constructor(baseType) {
+    super(`${baseType.description}?`)
+    this.baseType = baseType
+  }
+}
+
+export class ArrayType extends Type {
+  // Example: [int]
+  constructor(baseType) {
+    super(`[${baseType.description}]`)
+    this.baseType = baseType
+  }
+}
+
+export class FunctionType extends Type {
+  // Example: (boolean,[string]?)->float
+  constructor(paramTypes, returnType) {
+    super(`(${paramTypes.map(t => t.description).join(",")})->${returnType.description}`)
+    Object.assign(this, { paramTypes, returnType })
+  }
+}
+
 export class Function {
   constructor(name, paramCount, readOnly) {
     Object.assign(this, { name, paramCount, readOnly })
